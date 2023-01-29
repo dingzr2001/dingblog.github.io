@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-09-28T01:07:01.838Z</updated>
+  <updated>2023-01-29T08:34:11.141Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://example.com/2023/01/29/[Dive%20into%20Deep%20Learning]%20Covariate%20Shift,%20Label%20Shift%20and%20Concept%20Shift/"/>
+    <id>http://example.com/2023/01/29/[Dive%20into%20Deep%20Learning]%20Covariate%20Shift,%20Label%20Shift%20and%20Concept%20Shift/</id>
+    <published>2023-01-29T08:12:43.152Z</published>
+    <updated>2023-01-29T08:34:11.141Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Dive-into-Deep-Learning-Covariate-Shift-Label-Shift-and-Concept-Shift"><a href="#Dive-into-Deep-Learning-Covariate-Shift-Label-Shift-and-Concept-Shift" class="headerlink" title="[Dive into Deep Learning] Covariate Shift, Label Shift and Concept Shift"></a>[Dive into Deep Learning] Covariate Shift, Label Shift and Concept Shift</h1><p>When studying distribution shift, these concepts kept confusing me for a long time. After searching they finally become clearer.</p><h2 id="Covariate-Shift"><a href="#Covariate-Shift" class="headerlink" title="Covariate Shift"></a>Covariate Shift</h2><p>First, what exactly is a <strong>covariate</strong> in machine learning? Well, after searching I found that covariates in statistics corresponds with features in machine learning, which means that covariate shift is actually the shift of features. In many cases, the features of test datasets might differ from those of the training data sets, yet the labels remain the same. For example, one model is trained with a set of real dog pictures, but it might be required to distinguish a comic dog like Snoopy. The model has never seen Snoopy-like cartoon dogs before, and such dogs have different distribution of features and labels with real dogs, but they share the same label: dog. Such a shift of distribution is called <strong>covariate shift</strong>.</p><h2 id="Label-Shift"><a href="#Label-Shift" class="headerlink" title="Label Shift"></a>Label Shift</h2><p>Label shift is exactly the opposite of covariate shift. Here is what I found at <strong><a href="https://towardsdatascience.com/">https://towardsdatascience.com</a></strong>, written(or quoted) by Dr. Matthew Stewart:</p><blockquote><p>Prior probability shift appears only in Y-&gt;X problems, and is defined as the case where P<del>tra</del>(x|y) &#x3D; P<del>tst</del>(x|y) and P<del>tra</del>(y) ≠ P<del>tst</del>(y).</p></blockquote><p>So therefore the example of diseases and symptoms makes sense. We want to predict disease by symptoms, so ‘symptoms’ is X, and ‘diseases’ is Y. Apparently diseases cause symptoms, so this is a typical Y-&gt;X case. The distribution of diseases is not always the same, since diseases occur at different rates in different seasons, so the distribution of Y changes. This is a label shift.</p><h2 id="Concept-Shift"><a href="#Concept-Shift" class="headerlink" title="Concept Shift"></a>Concept Shift</h2><p>Concept shift is different, it is the mere change of P(y|x). Let’s assume there was once a type of medicine, but it was later redefined as a type of beverage by FDA, though its ingredients remains the same. So a model developed at the earlier period trying to classify medicine and beverage by the ingredients may not work well later.</p><p>That is my preliminary understanding of distribution shifts in this book. There’s still some ambiguity though, and I’ll keep working on that.</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Dive-into-Deep-Learning-Covariate-Shift-Label-Shift-and-Concept-Shift&quot;&gt;&lt;a href=&quot;#Dive-into-Deep-Learning-Covariate-Shift-Label-Shift</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
