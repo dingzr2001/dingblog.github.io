@@ -1,4 +1,8 @@
-http://example.com/2023/01/29/[Dive%20into%20Deep%20Learning]%20Covariate%20Shift,%20Label%20Shift%20and%20Concept%20Shift/
+http://example.com/2023/01/30/[Dive%20into%20Deep%20Learning]%20Covariate%20Shift,%20Label%20Shift%20and%20Concept%20Shift/
 http://example.com/about/index.html
 http://example.com/2022/09/28/hello-world/
 http://example.com/
+http://example.com/tags/machine-learning/
+http://example.com/tags/distribution-shift/
+http://example.com/categories/machine-learning/
+http://example.com/categories/machine-learning/Dive-into-Deep-Learning-Notes/
