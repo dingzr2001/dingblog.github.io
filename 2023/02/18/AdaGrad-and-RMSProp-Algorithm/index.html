@@ -16,25 +16,25 @@
   <meta name="author" content="dingzr2001">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[Dive into Deep Learning] Covariate Shift, Label Shift and Concept ShiftWhen studying distribution shift, these concepts kept confusing me for a long time. After searching they finally become clearer.">
+    <meta name="description" content="AdaGrad and RMSProp AlgorithmAdaGradStandard gradient descend is too scaled to be applied to modern deep neural network. AdaGrad is a effective method to optimize  by adjusting learning rate dynamical">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Covariate Shift, Label Shift and Concept Shift">
-<meta property="og:url" content="http://example.com/2023/01/30/[Dive%20into%20Deep%20Learning]%20Covariate%20Shift,%20Label%20Shift%20and%20Concept%20Shift/index.html">
+<meta property="og:title" content="AdaGrad and RMSProp Algorithm">
+<meta property="og:url" content="http://example.com/2023/02/18/AdaGrad-and-RMSProp-Algorithm/index.html">
 <meta property="og:site_name" content="DZRHome">
-<meta property="og:description" content="[Dive into Deep Learning] Covariate Shift, Label Shift and Concept ShiftWhen studying distribution shift, these concepts kept confusing me for a long time. After searching they finally become clearer.">
+<meta property="og:description" content="AdaGrad and RMSProp AlgorithmAdaGradStandard gradient descend is too scaled to be applied to modern deep neural network. AdaGrad is a effective method to optimize  by adjusting learning rate dynamical">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/img/distribution_shift.jpg">
-<meta property="article:published_time" content="2023-01-29T16:43:00.000Z">
-<meta property="article:modified_time" content="2023-01-29T09:03:44.045Z">
+<meta property="og:image" content="http://example.com/img/adagrad.jpg">
+<meta property="article:published_time" content="2023-02-17T17:53:00.000Z">
+<meta property="article:modified_time" content="2023-02-17T09:55:12.145Z">
 <meta property="article:author" content="dingzr2001">
 <meta property="article:tag" content="machine learning">
-<meta property="article:tag" content="distribution shift">
+<meta property="article:tag" content="optimization">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/img/distribution_shift.jpg">
+<meta name="twitter:image" content="http://example.com/img/adagrad.jpg">
   
   
   
-  <title>Covariate Shift, Label Shift and Concept Shift - DZRHome</title>
+  <title>AdaGrad and RMSProp Algorithm - DZRHome</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Covariate Shift, Label Shift and Concept Shift"></span>
+            <span id="subtitle" data-typed-text="AdaGrad and RMSProp Algorithm"></span>
           
         </div>
 
@@ -211,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-01-30 00:43" pubdate>
-          January 30, 2023 am
+        <time datetime="2023-02-18 01:53" pubdate>
+          February 18, 2023 am
         </time>
       </span>
     
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.8k words
+          1.6k words
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          15 mins
+          14 mins
         
       </span>
     
@@ -272,20 +272,23 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Covariate Shift, Label Shift and Concept Shift</h1>
+            <h1 style="display: none">AdaGrad and RMSProp Algorithm</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Dive-into-Deep-Learning-Covariate-Shift-Label-Shift-and-Concept-Shift"><a href="#Dive-into-Deep-Learning-Covariate-Shift-Label-Shift-and-Concept-Shift" class="headerlink" title="[Dive into Deep Learning] Covariate Shift, Label Shift and Concept Shift"></a>[Dive into Deep Learning] Covariate Shift, Label Shift and Concept Shift</h1><p>When studying distribution shift, these concepts kept confusing me for a long time. After searching they finally become clearer.</p>
-<h2 id="Covariate-Shift"><a href="#Covariate-Shift" class="headerlink" title="Covariate Shift"></a>Covariate Shift</h2><p>First, what exactly is a <strong>covariate</strong> in machine learning? Well, after searching I found that covariates in statistics corresponds with features in machine learning, which means that covariate shift is actually the shift of features. In many cases, the features of test datasets might differ from those of the training data sets, yet the labels remain the same. For example, one model is trained with a set of real dog pictures, but it might be required to distinguish a comic dog like Snoopy. The model has never seen Snoopy-like cartoon dogs before, and such dogs have different distribution of features and labels with real dogs, but they share the same label: dog. Such a shift of distribution is called <strong>covariate shift</strong>.</p>
-<h2 id="Label-Shift"><a href="#Label-Shift" class="headerlink" title="Label Shift"></a>Label Shift</h2><p>Label shift is exactly the opposite of covariate shift. Here is what I found at <strong><a target="_blank" rel="noopener" href="https://towardsdatascience.com/">https://towardsdatascience.com</a></strong>, written(or quoted) by Dr. Matthew Stewart:</p>
-<blockquote>
-<p>Prior probability shift appears only in Y-&gt;X problems, and is defined as the case where P<del>tra</del>(x|y) &#x3D; P<del>tst</del>(x|y) and P<del>tra</del>(y) ≠ P<del>tst</del>(y).</p>
-</blockquote>
-<p>So therefore the example of diseases and symptoms makes sense. We want to predict disease by symptoms, so ‘symptoms’ is X, and ‘diseases’ is Y. Apparently diseases cause symptoms, so this is a typical Y-&gt;X case. The distribution of diseases is not always the same, since diseases occur at different rates in different seasons, so the distribution of Y changes. This is a label shift.</p>
-<h2 id="Concept-Shift"><a href="#Concept-Shift" class="headerlink" title="Concept Shift"></a>Concept Shift</h2><p>Concept shift is different, it is the mere change of P(y|x). Let’s assume there was once a type of medicine, but it was later redefined as a type of beverage by FDA, though its ingredients remains the same. So a model developed at the earlier period trying to classify medicine and beverage by the ingredients may not work well later.</p>
-<p>That is my preliminary understanding of distribution shifts in this book. There’s still some ambiguity though, and I’ll keep working on that.</p>
+                <h1 id="AdaGrad-and-RMSProp-Algorithm"><a href="#AdaGrad-and-RMSProp-Algorithm" class="headerlink" title="AdaGrad and RMSProp Algorithm"></a>AdaGrad and RMSProp Algorithm</h1><h3 id="AdaGrad"><a href="#AdaGrad" class="headerlink" title="AdaGrad"></a>AdaGrad</h3><p>Standard gradient descend is too scaled to be applied to modern deep neural network. AdaGrad is a effective method to optimize  by adjusting learning rate dynamically and automatically. </p>
+<p>At each step,<br>$$<br>S_t&#x3D;S_{t-1}+\nabla W_t\cdot \nabla W_t<br>$$</p>
+<p>$$<br>W_t &#x3D;W_{t-1}-\frac{\eta}{\sqrt{S_t+\epsilon}}\nabla W_t<br>$$</p>
+<p>The more the weight vector has changed in a dimension,  the more gradient it has accumulated on that dimension.</p>
+<p>In AdaGrad, we use $ S_t $ to count the gradient of W in the past, and update W with S. The bigger $ S_i $ is, the smaller the change on $ W_i $ would be. By doing this, we could adjust learning rate on each dimension respectively, according to the frequency and range of changes on each dimension of the weight vector. If your path has gone through a steep slope in the direction of X-axis, you need to slow down in X-axis in case you miss the terminal. But your path is quite flat in Y-axis, so you don’t need to slow down too much on that direction.</p>
+<h3 id="RMSProp"><a href="#RMSProp" class="headerlink" title="RMSProp"></a>RMSProp</h3><p>The problem of AdaGrad is that it counts on gradients in the past too much, so that it might not respond timely on the sudden change of gradient. That is because S has accumulated too much previous gradient. We want to reduce the impact of the gradient too far away in the past, so here we have RMSProp Algorithm:<br>$$<br>S_t&#x3D;\gamma S_{t-1}+(1-\gamma)\nabla W_t\cdot \nabla W_t<br>$$</p>
+<p>$$<br>W_t &#x3D;W_{t-1}-\frac{\eta}{\sqrt{S_t+\epsilon}}\nabla W_t<br>$$</p>
+<p>The only change is the weight $ \gamma $ of $ S_{t-1} $. This makes the portion of previous gradients in current S decay in a growing rate. </p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p><a target="_blank" rel="noopener" href="https://zh-v2.d2l.ai/d2l-zh-pytorch.pdf">https://zh-v2.d2l.ai/d2l-zh-pytorch.pdf</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/72039430">https://zhuanlan.zhihu.com/p/72039430</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/rpsate/article/details/127320124">https://blog.csdn.net/rpsate/article/details/127320124</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1r64y1s7fU?spm_id_from=333.880.my_history.page.click">https://www.bilibili.com/video/BV1r64y1s7fU?spm_id_from=333.880.my_history.page.click</a></p>
 
                 
               </div>
@@ -328,7 +331,7 @@
       
         <a href="/tags/machine-learning/">#machine learning</a>
       
-        <a href="/tags/distribution-shift/">#distribution shift</a>
+        <a href="/tags/optimization/">#optimization</a>
       
     </div>
   
@@ -340,8 +343,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Covariate Shift, Label Shift and Concept Shift</div>
-      <div>http://example.com/2023/01/30/[Dive into Deep Learning] Covariate Shift, Label Shift and Concept Shift/</div>
+      <div>AdaGrad and RMSProp Algorithm</div>
+      <div>http://example.com/2023/02/18/AdaGrad-and-RMSProp-Algorithm/</div>
     </div>
     <div class="license-meta">
       
@@ -353,7 +356,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>January 30, 2023</div>
+          <div>February 18, 2023</div>
         </div>
       
       
@@ -385,18 +388,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/02/05/CNN%20Convolution/" title="">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/09/28/hello-world/" title="Hello World">
-                        <span class="hidden-mobile">Hello World</span>
+                      <a href="/2023/02/05/CNN%20Convolution/" title="">
+                        <span class="hidden-mobile"></span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

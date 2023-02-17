@@ -4,6 +4,48 @@
   
   
   <entry>
+    <title>AdaGrad and RMSProp Algorithm</title>
+    <link href="/2023/02/18/AdaGrad-and-RMSProp-Algorithm/"/>
+    <url>/2023/02/18/AdaGrad-and-RMSProp-Algorithm/</url>
+    
+    <content type="html"><![CDATA[<h1 id="AdaGrad-and-RMSProp-Algorithm"><a href="#AdaGrad-and-RMSProp-Algorithm" class="headerlink" title="AdaGrad and RMSProp Algorithm"></a>AdaGrad and RMSProp Algorithm</h1><h3 id="AdaGrad"><a href="#AdaGrad" class="headerlink" title="AdaGrad"></a>AdaGrad</h3><p>Standard gradient descend is too scaled to be applied to modern deep neural network. AdaGrad is a effective method to optimize  by adjusting learning rate dynamically and automatically. </p><p>At each step,<br>$$<br>S_t&#x3D;S_{t-1}+\nabla W_t\cdot \nabla W_t<br>$$</p><p>$$<br>W_t &#x3D;W_{t-1}-\frac{\eta}{\sqrt{S_t+\epsilon}}\nabla W_t<br>$$</p><p>The more the weight vector has changed in a dimension,  the more gradient it has accumulated on that dimension.</p><p>In AdaGrad, we use $ S_t $ to count the gradient of W in the past, and update W with S. The bigger $ S_i $ is, the smaller the change on $ W_i $ would be. By doing this, we could adjust learning rate on each dimension respectively, according to the frequency and range of changes on each dimension of the weight vector. If your path has gone through a steep slope in the direction of X-axis, you need to slow down in X-axis in case you miss the terminal. But your path is quite flat in Y-axis, so you don’t need to slow down too much on that direction.</p><h3 id="RMSProp"><a href="#RMSProp" class="headerlink" title="RMSProp"></a>RMSProp</h3><p>The problem of AdaGrad is that it counts on gradients in the past too much, so that it might not respond timely on the sudden change of gradient. That is because S has accumulated too much previous gradient. We want to reduce the impact of the gradient too far away in the past, so here we have RMSProp Algorithm:<br>$$<br>S_t&#x3D;\gamma S_{t-1}+(1-\gamma)\nabla W_t\cdot \nabla W_t<br>$$</p><p>$$<br>W_t &#x3D;W_{t-1}-\frac{\eta}{\sqrt{S_t+\epsilon}}\nabla W_t<br>$$</p><p>The only change is the weight $ \gamma $ of $ S_{t-1} $. This makes the portion of previous gradients in current S decay in a growing rate. </p><h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p><a href="https://zh-v2.d2l.ai/d2l-zh-pytorch.pdf">https://zh-v2.d2l.ai/d2l-zh-pytorch.pdf</a></p><p><a href="https://zhuanlan.zhihu.com/p/72039430">https://zhuanlan.zhihu.com/p/72039430</a></p><p><a href="https://blog.csdn.net/rpsate/article/details/127320124">https://blog.csdn.net/rpsate/article/details/127320124</a></p><p><a href="https://www.bilibili.com/video/BV1r64y1s7fU?spm_id_from=333.880.my_history.page.click">https://www.bilibili.com/video/BV1r64y1s7fU?spm_id_from=333.880.my_history.page.click</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>machine learning</category>
+      
+      <category>Dive into Deep Learning-Notes</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>machine learning</tag>
+      
+      <tag>optimization</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/2023/02/05/CNN%20Convolution/"/>
+    <url>/2023/02/05/CNN%20Convolution/</url>
+    
+    <content type="html"><![CDATA[<hr><hr><h1 id="CNN-Convolution"><a href="#CNN-Convolution" class="headerlink" title="CNN: Convolution?"></a>CNN: Convolution?</h1><p>Now I am at chapter <em>convolutional neural network</em>. There is a formula with many subscripts:</p><p><img src="D:\dingblog\source\img\convolution\formula.png"></p><p>What does it mean?</p><p>Well, let’s put it in a graph. </p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Covariate Shift, Label Shift and Concept Shift</title>
     <link href="/2023/01/30/%5BDive%20into%20Deep%20Learning%5D%20Covariate%20Shift,%20Label%20Shift%20and%20Concept%20Shift/"/>
     <url>/2023/01/30/%5BDive%20into%20Deep%20Learning%5D%20Covariate%20Shift,%20Label%20Shift%20and%20Concept%20Shift/</url>
