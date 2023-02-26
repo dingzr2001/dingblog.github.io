@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-02-18T17:06:25.270Z</updated>
+  <updated>2023-02-26T07:30:45.025Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Python Interview-1. Variables and Copy</title>
+    <link href="http://example.com/2023/02/26/[Python%20Interview]1.%20Variables%20and%20Copy/"/>
+    <id>http://example.com/2023/02/26/[Python%20Interview]1.%20Variables%20and%20Copy/</id>
+    <published>2023-02-25T20:51:00.000Z</published>
+    <updated>2023-02-26T07:30:45.025Z</updated>
+    
+    <content type="html"><![CDATA[<h1>[Python Interview]1. Variables and Copy</h1><h2 id="Variable-Types">Variable Types</h2><h3 id="immutable-variable">immutable variable</h3><p>immutable variables include :</p><ul><li>int</li><li>string</li><li>tuple</li></ul><p>When a function is called, the immutable variable parameters are passed by value.</p><p>For immutable variables, shallow copy and deep copy both will not allocate new memory space for the new variable. The two kinds of copies only build a reference relationship between the old object and the new object.</p><h3 id="mutable-variable">mutable variable</h3><p>immutable variables include:</p><ul><li>set</li><li>list</li><li>dict</li></ul><p>When a function is called, the mutable variable parameters are passed by reference.</p><p>For mutable variables, shallow copy and deep copy both will allocate new memory space for the new variable. However, for the immutable variables contained in mutable variables like lists, they are still shallow copied. So the deep copy of mutable variables just copy themselves, excluding the immutable variables contained.</p><h2 id="two-kinds-of-‘copy’">two kinds of ‘copy’</h2><p>Shallow copy is quite unanimous for all kinds of variables. However, deep copy for complex variables that have multi layers is worth discussing.</p><p>Actually, the principle can be concluded as:</p><ul><li>For each layer, follow the following rules recursively:</li><li>If the current layer is immutable, and all sub-elements are immutable, then no new space and object will be allocated for this layer.</li><li>If the current layer is immutable, and some of the sub-elements are mutable, then deep-copy these sub-elements and the current layer.</li><li>If the current layer is mutable, create a new object for the current layer, and copy the sub-elements depending on their mutability recursively.</li></ul><p>That’s based on my comprehension, some might be wrong.</p><h2 id="References">References</h2><p><a href="https://zhuanlan.zhihu.com/p/487677774">https://zhuanlan.zhihu.com/p/487677774</a></p><p><a href="https://mp.weixin.qq.com/s?__biz=MzU0NjgzMDIxMQ==&amp;mid=2247569389&amp;idx=4&amp;sn=7f93a257c597821bb55da3e2637a3f3d&amp;chksm=fb542d01cc23a4178b83617a01e933494ca6274dd2086baf2bd0354ac30637cc9af674458116&amp;scene=27">https://mp.weixin.qq.com/s?__biz=MzU0NjgzMDIxMQ==&amp;mid=2247569389&amp;idx=4&amp;sn=7f93a257c597821bb55da3e2637a3f3d&amp;chksm=fb542d01cc23a4178b83617a01e933494ca6274dd2086baf2bd0354ac30637cc9af674458116&amp;scene=27</a></p><p><a href="https://blog.csdn.net/m0_59044674/article/details/127267173">https://blog.csdn.net/m0_59044674/article/details/127267173</a></p><p><a href="https://towardsdatascience.com/an-overview-of-mutability-in-python-objects-8efce55fd08f">https://towardsdatascience.com/an-overview-of-mutability-in-python-objects-8efce55fd08f</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;[Python Interview]1. Variables and Copy&lt;/h1&gt;
+&lt;h2 id=&quot;Variable-Types&quot;&gt;Variable Types&lt;/h2&gt;
+&lt;h3 id=&quot;immutable-variable&quot;&gt;immutable variable&lt;</summary>
+      
+    
+    
+    
+    <category term="python" scheme="http://example.com/categories/python/"/>
+    
+    <category term="basics" scheme="http://example.com/categories/python/basics/"/>
+    
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
+    
+    <category term="variable" scheme="http://example.com/tags/variable/"/>
+    
+    <category term="copy" scheme="http://example.com/tags/copy/"/>
+    
+  </entry>
   
   <entry>
     <title>AdaDelta and Adam Algorithm</title>
