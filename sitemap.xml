@@ -240,14 +240,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/machine-learning/Dive-into-Deep-Learning-Notes/</loc>
+    <loc>http://example.com/categories/python/</loc>
     <lastmod>2023-06-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://example.com/categories/python/</loc>
+    <loc>http://example.com/categories/machine-learning/Dive-into-Deep-Learning-Notes/</loc>
     <lastmod>2023-06-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -261,7 +261,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/machine-learning/Dive-into-Deep-Learning-Notes/optimization/</loc>
+    <loc>http://example.com/categories/db-index/</loc>
     <lastmod>2023-06-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -275,14 +275,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/English/listening/</loc>
+    <loc>http://example.com/categories/machine-learning/Dive-into-Deep-Learning-Notes/optimization/</loc>
     <lastmod>2023-06-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://example.com/categories/db-index/</loc>
+    <loc>http://example.com/categories/English/listening/</loc>
     <lastmod>2023-06-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
