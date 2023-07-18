@@ -161,20 +161,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/listening/</loc>
-    <lastmod>2023-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/tags/podcast/</loc>
-    <lastmod>2023-07-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/tags/python/</loc>
     <lastmod>2023-07-18</lastmod>
     <changefreq>weekly</changefreq>
@@ -196,7 +182,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/distribution-shift/</loc>
+    <loc>http://example.com/tags/listening/</loc>
+    <lastmod>2023-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/podcast/</loc>
     <lastmod>2023-07-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -218,6 +211,13 @@
   
   <url>
     <loc>http://example.com/tags/predict/</loc>
+    <lastmod>2023-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/distribution-shift/</loc>
     <lastmod>2023-07-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -247,14 +247,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/English/</loc>
+    <loc>http://example.com/categories/python/</loc>
     <lastmod>2023-07-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://example.com/categories/python/</loc>
+    <loc>http://example.com/categories/English/</loc>
     <lastmod>2023-07-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -275,14 +275,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/English/listening/</loc>
+    <loc>http://example.com/categories/python/basics/</loc>
     <lastmod>2023-07-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://example.com/categories/python/basics/</loc>
+    <loc>http://example.com/categories/English/listening/</loc>
     <lastmod>2023-07-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
