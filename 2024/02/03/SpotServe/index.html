@@ -1,0 +1,736 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/psyduck.ico">
+  <link rel="icon" href="/img/psyduck.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="transparent">
+  <meta name="author" content="dingzr2001">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="SpotServe: Serving Generative Large Language Models on Preemptible Instances Author: Xupeng Miao, et al. Background Generative LLM    Input: tokens;   Output: token sequence   Stops when: output reach">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpotServe, Serving Generative Large Language Models on Preemptible Instances">
+<meta property="og:url" content="http://example.com/2024/02/03/SpotServe/index.html">
+<meta property="og:site_name" content="DZRHome">
+<meta property="og:description" content="SpotServe: Serving Generative Large Language Models on Preemptible Instances Author: Xupeng Miao, et al. Background Generative LLM    Input: tokens;   Output: token sequence   Stops when: output reach">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/milvus/Milvus.jpg">
+<meta property="article:published_time" content="2024-02-02T17:15:00.000Z">
+<meta property="article:modified_time" content="2024-02-01T18:16:01.304Z">
+<meta property="article:author" content="dingzr2001">
+<meta property="article:tag" content="vector database">
+<meta property="article:tag" content="cpu-gpu co-design">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/milvus/Milvus.jpg">
+  
+  
+  
+  <title>SpotServe, Serving Generative Large Language Models on Preemptible Instances - DZRHome</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="DZRHome" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>DING&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SpotServe, Serving Generative Large Language Models on Preemptible Instances"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-02-03 01:15" pubdate>
+          February 3, 2024 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">SpotServe, Serving Generative Large Language Models on Preemptible Instances</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1><strong>SpotServe: Serving Generative Large Language Models on Preemptible Instances</strong></h1>
+<p>Author: Xupeng Miao, et al.</p>
+<h2 id="Background">Background</h2>
+<h3 id="Generative-LLM">Generative LLM</h3>
+<p><img src="https://lh7-us.googleusercontent.com/__jCtoUnwYaYZ8vWKlfn_-PsE6uQZ41sjjkrQ0it5gVYu5o9_R3DIciYp3GgOunsNsa0Pz5mRqJvuHHwhRx1t64AdmjazFVge6AqVtAC8WouPtAj0S71vs6tbg5f4DaEFC0ndDRucqVq4Ngwt98sAwF3DQ=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li>
+<p>Input: tokens;</p>
+</li>
+<li>
+<p>Output: token sequence</p>
+</li>
+<li>
+<p>Stops when: output reaches maximum length/ending token <EOT></EOT></p>
+</li>
+</ul>
+<h3 id="Two-types-of-GPU-Instances">Two types of GPU Instances</h3>
+<ul>
+<li>
+<p>On-demand GPUs:</p>
+<ul>
+<li><strong>Expensive</strong></li>
+<li>Use anytime you need</li>
+</ul>
+</li>
+<li>
+<p>Preemptible GPU Instances (e.g. Spot Instances):</p>
+<ul>
+<li><strong>Cheap (run on spare capacity)</strong></li>
+<li>Might be Preempted anytime</li>
+<li>Offers a grace period after preemption to complete currently running tasks</li>
+</ul>
+<p><img src="https://lh7-us.googleusercontent.com/DkwxhSsXc0N0WC81IuCqRq9LXtl9aXjPPiM8yei1CeiuHp_jHZOZWvidvJrN-hygJVM_vc9wGKiqVlTVJiv5vhHzOCEXUKpK20txDLNUNcxoz3nKE0O7KDXFiAfXOU85Qax8Nsg1q_sOIDuHFZ148YG1IQ=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<h2 id="Challenges">Challenges</h2>
+<ul>
+<li>
+<p>The number of available preemptible instances changes frequently <strong>=&gt;</strong> <strong>Dynamic reparallelization</strong> for optimized serving performance</p>
+</li>
+<li>
+<p>Restarting LLM results in great overhead of reloading parameters <strong>=&gt;</strong> Find the <strong>optimal migration strategy</strong> that minimize the cost</p>
+</li>
+<li>
+<p>Grace periods may not be long enough for finishing current request</p>
+</li>
+<li>
+<p>The reduction of throughput during this process might lead to accumulation of subsequent requests</p>
+</li>
+</ul>
+<h2 id="SpotServe">SpotServe</h2>
+<h3 id="Overview">Overview</h3>
+<p><img src="https://lh7-us.googleusercontent.com/XZZe4AHfMJmr_CeXTrBMCnfXwgQzDLcx_JWctJd7FrUSSlvNvBLlWeiNsg_rdVoFw-qOODUKmDPkdLP5tIQ-aTJgIwW095JejoCQ2C422osBni5AsSlbR1bBp0M0x0ZSIjhAlCKAZYzGHrAUS4few2Fzpw=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li>Request Manager: handle requests, partition into batches, assign them to instances, send output to users</li>
+<li>Instance server: monitor the preemption and acquisition of instances</li>
+<li>Meta-context manager: schedule the context migration between GPU instances (parameters, outputs, etc.)</li>
+</ul>
+<h3 id="Meta-context-Manager">Meta-context Manager</h3>
+<h4 id="Parallelization-Controller">Parallelization Controller</h4>
+<h4 id="Parallelization-Configurations">Parallelization Configurations:</h4>
+<ul>
+<li><strong>D</strong>: Data Parallelization: partition requests and assign them to different pipelines</li>
+<li><strong>P</strong>: Pipeline model parallelization: run different stages of a inference process simultaneously (like pipeline in CPU)</li>
+<li><strong>M</strong>: Tensor model parallelization: split the model into shards and assign to different GPUsParallel</li>
+<li>Configuration <strong>C</strong> = (D, P, M)</li>
+</ul>
+<p><img src="https://lh7-us.googleusercontent.com/vyC2ivtUjb6jx-4a44Fb-CCILGpqTHIEZMD-sRazYRNajDIa6vzZqFXZHArPoHxWMf5MCoAV3lVPlg2r4O3YBeunuAMUd0tM3K6b-MYiMbfvqvoyXCeVAB_1UdUjL5LFmbTta3KVMqO1xVF8CMCfSj4M0w=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://lh7-us.googleusercontent.com/UgHiPq-iqfUTUlfZ_eKKxCdAKfGLZ35NR8BfY9Fysni41dIrpP4mwr2jlxwCZq5_W2W-pTUv4ptNxZ0NTF5lYBbXBIXXdNyrzF5aTfRP-tRd5i6uhKirSBcDYuvl4LGq_TBrEBgU7TpoczmxQTtrBP4weQ=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h4 id="Configuration-Optimizer">Configuration Optimizer</h4>
+<p><img src="https://lh7-us.googleusercontent.com/vzMkndwQq5s5d6cRu5F28hXBWyoeNyr7_5-GZZgR-MG9ntKYYiWoiZLk5JWeBT99xYLULeWop0OObtPAduL5HGPQ2pO0gCz7dqPS3SGl3M0DXXOzbzIbShbMAlZMrdbLLGDV5HoI0EMUM75r5OLS5u0BCw=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>If</strong> there is a configuration such that the throughput is larger than the request arrival rate, <strong>then</strong> choose the configuration that has minimum inference latency while making sure the throughput is larger than arrival rate. <strong>Otherwise</strong>, find the C for maximum throughput.</p>
+<p><strong>After</strong> adjusting the configuration, allocate or free instances.</p>
+<p>Offline process =&gt; low latency</p>
+<p><strong>What do we have now?</strong></p>
+<ul>
+<li>We now have a configuration for the next step.</li>
+<li>However, we only decided the parallelization structure.</li>
+<li>How should us decide how to map the physical instances to logical positions?</li>
+</ul>
+<h3 id="Device-Mapper"><strong>Device Mapper</strong></h3>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/vector-db/" class="category-chain-item">vector_db</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/vector-database/">#vector database</a>
+      
+        <a href="/tags/cpu-gpu-co-design/">#cpu-gpu co-design</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SpotServe, Serving Generative Large Language Models on Preemptible Instances</div>
+      <div>http://example.com/2024/02/03/SpotServe/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>dingzr2001</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 3, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/02/03/Milvus/" title="Milvus, A Purpose-Built Vector Data Management System">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Milvus, A Purpose-Built Vector Data Management System</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/29/Tiresias/" title="&lt;note&gt;Tiresias：Enabling Predictive Autonomous Storage and Indexing">
+                        <span class="hidden-mobile">&lt;note&gt;Tiresias：Enabling Predictive Autonomous Storage and Indexing</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

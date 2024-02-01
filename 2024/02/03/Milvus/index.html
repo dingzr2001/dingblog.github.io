@@ -1,0 +1,818 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/psyduck.ico">
+  <link rel="icon" href="/img/psyduck.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="transparent">
+  <meta name="author" content="dingzr2001">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Milvus: A Purpose-Built Vector Data Management System Author: Jianguo Wang ,et al. vector database  A new type of database specialized in storing and querying vector data.   Traditional relational dat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Milvus, A Purpose-Built Vector Data Management System">
+<meta property="og:url" content="http://example.com/2024/02/03/Milvus/index.html">
+<meta property="og:site_name" content="DZRHome">
+<meta property="og:description" content="Milvus: A Purpose-Built Vector Data Management System Author: Jianguo Wang ,et al. vector database  A new type of database specialized in storing and querying vector data.   Traditional relational dat">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/milvus/Milvus.jpg">
+<meta property="article:published_time" content="2024-02-02T17:15:00.000Z">
+<meta property="article:modified_time" content="2024-02-01T18:15:33.199Z">
+<meta property="article:author" content="dingzr2001">
+<meta property="article:tag" content="vector database">
+<meta property="article:tag" content="cpu-gpu co-design">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/milvus/Milvus.jpg">
+  
+  
+  
+  <title>Milvus, A Purpose-Built Vector Data Management System - DZRHome</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="DZRHome" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>DING&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Milvus, A Purpose-Built Vector Data Management System"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-02-03 01:15" pubdate>
+          February 3, 2024 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.8k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          32 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Milvus, A Purpose-Built Vector Data Management System</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1>Milvus: A Purpose-Built Vector Data Management System</h1>
+<p>Author: Jianguo Wang ,et al.</p>
+<h3 id="vector-database">vector database</h3>
+<p><img src="https://lh7-us.googleusercontent.com/a1SSv6X8vFe2r4xKdwJtEs4gQZn1wZ0RoCCBWQeNyRfY5XoMlgPK3WDeeIylBIza92CYhsbici0HTGf0iNeIUZj-SRb5eqZQfXEX6QLCDCKpdtDAEUE06VT4zOJdThJPJJJGqjWh_1Fwqhx4e210APvifQ=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>A new type of database specialized in storing and querying vector data.</p>
+<ul>
+<li>
+<p>Traditional relational databases: precise attribute-based searches</p>
+</li>
+<li>
+<p>Vector database: approximate similarity-based vector searches: find the k-nearest vectors to the query.</p>
+</li>
+</ul>
+<h3 id="Background-Motivation">Background &amp; Motivation</h3>
+<p><img src="/.com//D:%5Cdingblog%5Csource%5Cimg%5Cmilvus%5Cmotivation.png" srcset="/img/loading.gif" lazyload alt></p>
+<h3 id="Challenges">Challenges</h3>
+<p>Current works have the following limitations:</p>
+<ul>
+<li>They are not full-fledged systems and cannot handle large amount of data</li>
+<li>They cannot easily handle dynamic data while ensuring fast real-time searches</li>
+<li>They do not support advanced query processing</li>
+<li>They are not optimized for heterogeneous computing architecture with CPUs and GPUs</li>
+</ul>
+<h3 id="Milvus">Milvus</h3>
+<p>Milvus: a purpose-built vector data management system for managing large-scale and dynamic vector data to enable data science and AI applications.</p>
+<p>Milvus incorporates query processing, indexing and storage management and CPU-GPU codesign into the whole system, successfully addressing the previous issues.</p>
+<h4 id="Overall-Architecture-of-Milvus">Overall Architecture of Milvus</h4>
+<p><img src="https://lh7-us.googleusercontent.com/fLfYZw5bi5SJqc526JvvWF9Cx-v3_mwoboDJgCSvyPyQZPXp9-9V09R0zzmJnSR_IJ5VzQ2cdgPujHesMvg7GIOmnH67yceAwLh3BDXYypLXBQCsHiMAfkhMSBf8fxVTnx-vCywD4YGqTruMwE_VB0XuzQ=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h4 id="Query-Processing">Query Processing</h4>
+<p>Support of query types:</p>
+<ul>
+<li>Vector Query (1 vector)</li>
+<li><strong>Attribute Filtering</strong> (1 vector + n attribute constraints)<strong>(Advanced Query)</strong></li>
+<li><strong>Multi-vector Query</strong> (n vectors)<strong>(Advanced Query)</strong></li>
+</ul>
+<p>Support of similarity functions:</p>
+<ul>
+<li>Euclidean distance</li>
+<li>Inner product</li>
+<li>Cosine similarity</li>
+<li>Hamming distance</li>
+<li>Jaccard distance</li>
+</ul>
+<h4 id="Attribute-Filtering">Attribute Filtering</h4>
+<h5 id="img"><img src="https://lh7-us.googleusercontent.com/PIxpQQ5Z7gQ1MACU9tAa6PSjklRxVUxmoLkX62A7-mFhSS_PPCgg7QmXoNU8hQZtn8-MkIa9QyzLXOIF8IZniVmDClHUvkxCUH88iuBP7SFyVzzMtErNFWB_WINUlC6e9gFy6QyJZ2KQZvAd59vPHIgMiA=s2048" srcset="/img/loading.gif" lazyload alt="img"></h5>
+<ul>
+<li>
+<p>A: ①obtain the satisfied vectors②fully scann them</p>
+</li>
+<li>
+<p>B: ①obtain the satisfied vectors②use bitmap to find the answer</p>
+</li>
+<li>
+<p>C: ①obtain more than k results②fully scan and find those satisfy the attribute constraint</p>
+</li>
+<li>
+<p>D: estimate the cost of A,B,C and find the best one</p>
+</li>
+<li>
+<p>E (Milvus): Partition-based filtering</p>
+<ol>
+<li>Create partitions for data</li>
+<li>Maintain min-max indexes for different partitions</li>
+<li>Skip the partitions whose range of attribute does not overlap with the queries’</li>
+<li>Find the overlapping partitions, and apply strategy D(cost-based) within each partition</li>
+</ol>
+</li>
+</ul>
+<h4 id="Multi-vector-Queries">Multi-vector Queries</h4>
+<ul>
+<li>
+<h5 id="For-decomposable-similarity-functions-Use-aggregate-functions-to-concentrate-the-vectors-and-find-the-k-nearest-neighbors-based-on-the-concentrated-vector-vector-fusion">For decomposable similarity functions: Use aggregate functions to concentrate the vectors and find the k nearest neighbors based on the concentrated vector (vector fusion)</h5>
+</li>
+<li>
+<p>For indecomposable similarity functions:</p>
+</li>
+</ul>
+<p><img src="https://lh7-us.googleusercontent.com/2nbN36rss_FJXsQqeqROW-fWUY1oggQ7aHsP796HQdaQCTObmj09hl2koBem7ygklF9_iVH3Jg3A2GCUYbjmSQozPgdqe2jIgjqc8YCE9-HBJT_EQw1hK6NOTqXWCXhPynJHyr4CnnaMFppibQlTjMcZaA=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h4 id="Indexing-Querying">Indexing (Querying)</h4>
+<ul>
+<li>
+<p>Quantization-based Indexing: (Quantization: represent vectors with a codebook. First find n nearest clusters to q, then use the indexing to search within these clusters.)</p>
+<ul>
+<li>
+<p>IVF_FLAT</p>
+</li>
+<li>
+<p>IVF_SQ8</p>
+</li>
+<li>
+<p>IVF_PQ</p>
+<p><img src="https://lh7-us.googleusercontent.com/cQ7gqM4L-mFpA5ciP5EhImJx1pEpdO4lO5yWXXARHCgnVeDfLJcU8feY_Uc-ivjsKUzS-h5p_tGCnv5nSRARPKwspRN9DCXtt3_WhkmQZLdow7A7J97vm1QItFTehk6aFpiek_Qc7ow7X_wTIdxyjW90LQ=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Graph-based indexing:</p>
+<ul>
+<li>HNSW</li>
+<li>RNSG</li>
+</ul>
+</li>
+</ul>
+<h4 id="Vector-and-Attribute-Storage">Vector and Attribute Storage</h4>
+<p>To facilitate query processing, Milvus stores vectors and attributes in a columnar fasion.</p>
+<ul>
+<li><strong>Vectors</strong>: different vectors of entities are stored together correspondingly.</li>
+<li><strong>Attributes</strong>: &lt;attr value, row ID&gt; pairs + skipping indexes (min-max) for pages</li>
+</ul>
+<p><img src="/.com//D:%5Cdingblog%5Csource%5Cimg%5Cmilvus%5Cstorage.png" srcset="/img/loading.gif" lazyload alt></p>
+<p>Milvus also relies on LRU-based buffer and supports multiple file systems.</p>
+<h4 id="Optimizations-for-Heterogeneous-Computing">Optimizations for Heterogeneous Computing</h4>
+<p>How to find the top k similar vectors for multiple queries efficiently?</p>
+<ul>
+<li>CPU-oriented Optimization</li>
+<li>GPU-oriented Optimization</li>
+<li>CPU-GPU codesign</li>
+</ul>
+<h4 id="CPU-oriented-Optimization">CPU-oriented Optimization</h4>
+<ul>
+<li>
+<h5 id="Faiss-leveraged-OpenMP-to-realize-multi-threading-Each-thread-process-a-query-at-a-time-Two-issues"><strong>Faiss</strong> leveraged OpenMP to realize multi-threading. Each thread process a query at a time. Two issues:</h5>
+<ul>
+<li>High cache-missing rate (requires to stream the entire data into caches, cannot reuse)</li>
+<li>Cannot fully exploit cores when query number is small</li>
+</ul>
+</li>
+<li>
+<p><strong>Milvus</strong> assign threads to data vectors instead of query vectors to address the 2nd issue.</p>
+<ul>
+<li>Divide the queries into blocks s.t. each query block and its heaps can fit in L3 cache.</li>
+<li>Results are managed in heaps. To obtain the final results, merge the result.</li>
+<li>Milvus is also capable of automatically choosing SIMD instructions for functions.</li>
+</ul>
+</li>
+</ul>
+<h5 id="GPU-oriented-Optimization">GPU-oriented Optimization</h5>
+<ul>
+<li><strong>Faiss</strong>: k&lt;=1024 because of the limit of memory</li>
+<li><strong>Milvus</strong>: divide k into different rounds, each round expanding the obtained result set until reaches the required number.Faiss: must set the number of GPUs in advance; dynamic segment-based scheduling that assign search tasks to available devices</li>
+</ul>
+<h5 id="CPU-GPU-Co-design">CPU-GPU Co-design</h5>
+<ul>
+<li>
+<p>Limitations of <strong>Faiss</strong> (IVF_SQ8):Low PCIe bandwidth utilization (1 bucket per time)Data transfer makes GPU computing unbeneficial</p>
+</li>
+<li>
+<p><strong>Milvus</strong> (SQ8H):High bandwidth utilization (Multiple buckets loaded per time)Assess the running mode (GPU-only or hybrid) based on the batch size</p>
+<p><img src="https://lh7-us.googleusercontent.com/1bi-T_L1k4IU-SxJ1jBMFvNr0yG9j_xd_6dVzgkk1XvZyRNptDrTs4MYPhyZX4lzrCA2enF8bQ06sYe_SKCdhR3TiuSA8dA4eesCGFZ2b6ZjtxB5ptqr-3KiTfyS7FFMEh6MNxuXI2IpTG9N2G3Uj-GS4A=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<h3 id="Applications">Applications</h3>
+<ul>
+<li>Recommender System</li>
+<li><strong>Image Recognition</strong></li>
+<li><strong>Chemical Structure Analysis</strong></li>
+<li>etc.</li>
+</ul>
+<h3 id="Evaluation">Evaluation</h3>
+<h4 id="Evaluation-Comparing-with-other-systems">Evaluation (Comparing with other systems)</h4>
+<ul>
+<li>10M vectors from SIFT1B and Deep1B</li>
+<li>10000 random queries</li>
+</ul>
+<p><img src="https://lh7-us.googleusercontent.com/ENprp6rC88V22r2w7OkwVJ_iQCRo3JWz16ulMGvlaUWXf7yeBZPw4LG3N0ntxUXmMXHia-7ZOKVW5rLj6407GOoVLfTZPbeQTnDKER5bW9ImUvkkMiJvF9C8R2ngaaEovkgmOvAsRdMBW891rUByVLa5ZA=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h4 id="Evaluation-cache-aware-design">Evaluation: cache-aware design</h4>
+<p><img src="https://lh7-us.googleusercontent.com/5SyAZyajVqTUSdJOh2ROCylw6dl8Ri1EmLd-Fzz539KXGJq4XVcXVBfslC23JIFzRQXnGBSd2hXKl-A43FQoC66goZvL_nzjsZLeNt-PeWhFulHk_DyNN3TkoZ53SboSvDcVOra9R9dIpMwLmUa2Wg3aAA=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h4 id="Evaluation-Attribute-Filtering">Evaluation-Attribute Filtering</h4>
+<p><img src="https://lh7-us.googleusercontent.com/-m3podLKsG3KUBocsv_qeZMc1hfrs8SLUhxwradn7zReuSe3t9-Zy7we5VspsTUWl_lQvsFPXfIDb7dNdcvl5-dalb92GlQ1lm5bempLPhhgkqNyiDP2yhU2Gl6ydjX4QF7RU_5VOqgKLL66uYwzRuGsrw=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/vector-db/" class="category-chain-item">vector_db</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/vector-database/">#vector database</a>
+      
+        <a href="/tags/cpu-gpu-co-design/">#cpu-gpu co-design</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Milvus, A Purpose-Built Vector Data Management System</div>
+      <div>http://example.com/2024/02/03/Milvus/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>dingzr2001</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 3, 2024</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/02/03/SpotServe/" title="SpotServe, Serving Generative Large Language Models on Preemptible Instances">
+                        <span class="hidden-mobile">SpotServe, Serving Generative Large Language Models on Preemptible Instances</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,3 +1,5 @@
+http://example.com/2024/02/03/SpotServe/
+http://example.com/2024/02/03/Milvus/
 http://example.com/about/index.html
 http://example.com/2023/06/29/Tiresias/
 http://example.com/2023/05/23/GreenPlum/
@@ -13,6 +15,8 @@ http://example.com/2022/09/28/hello-world/
 http://example.com/
 http://example.com/tags/machine-learning/
 http://example.com/tags/optimization/
+http://example.com/tags/vector-database/
+http://example.com/tags/cpu-gpu-co-design/
 http://example.com/tags/greenplum/
 http://example.com/tags/postgresql/
 http://example.com/tags/python37/
@@ -27,6 +31,7 @@ http://example.com/tags/index/
 http://example.com/tags/predict/
 http://example.com/tags/distribution-shift/
 http://example.com/categories/machine-learning/
+http://example.com/categories/vector-db/
 http://example.com/categories/ubuntu/
 http://example.com/categories/machine-learning/Dive-into-Deep-Learning-Notes/
 http://example.com/categories/python/
