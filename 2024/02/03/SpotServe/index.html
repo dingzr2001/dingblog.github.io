@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/img/milvus/Milvus.jpg">
 <meta property="article:published_time" content="2024-02-02T17:15:00.000Z">
-<meta property="article:modified_time" content="2024-02-01T18:16:01.304Z">
+<meta property="article:modified_time" content="2024-02-01T18:25:03.962Z">
 <meta property="article:author" content="dingzr2001">
 <meta property="article:tag" content="vector database">
 <meta property="article:tag" content="cpu-gpu co-design">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k words
+          3.1k words
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          16 mins
+          27 mins
         
       </span>
     
@@ -349,7 +349,7 @@
 </ul>
 <h3 id="Meta-context-Manager">Meta-context Manager</h3>
 <h4 id="Parallelization-Controller">Parallelization Controller</h4>
-<h4 id="Parallelization-Configurations">Parallelization Configurations:</h4>
+<h5 id="Parallelization-Configurations">Parallelization Configurations:</h5>
 <ul>
 <li><strong>D</strong>: Data Parallelization: partition requests and assign them to different pipelines</li>
 <li><strong>P</strong>: Pipeline model parallelization: run different stages of a inference process simultaneously (like pipeline in CPU)</li>
@@ -358,7 +358,7 @@
 </ul>
 <p><img src="https://lh7-us.googleusercontent.com/vyC2ivtUjb6jx-4a44Fb-CCILGpqTHIEZMD-sRazYRNajDIa6vzZqFXZHArPoHxWMf5MCoAV3lVPlg2r4O3YBeunuAMUd0tM3K6b-MYiMbfvqvoyXCeVAB_1UdUjL5LFmbTta3KVMqO1xVF8CMCfSj4M0w=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><img src="https://lh7-us.googleusercontent.com/UgHiPq-iqfUTUlfZ_eKKxCdAKfGLZ35NR8BfY9Fysni41dIrpP4mwr2jlxwCZq5_W2W-pTUv4ptNxZ0NTF5lYBbXBIXXdNyrzF5aTfRP-tRd5i6uhKirSBcDYuvl4LGq_TBrEBgU7TpoczmxQTtrBP4weQ=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h4 id="Configuration-Optimizer">Configuration Optimizer</h4>
+<h5 id="Configuration-Optimizer">Configuration Optimizer</h5>
 <p><img src="https://lh7-us.googleusercontent.com/vzMkndwQq5s5d6cRu5F28hXBWyoeNyr7_5-GZZgR-MG9ntKYYiWoiZLk5JWeBT99xYLULeWop0OObtPAduL5HGPQ2pO0gCz7dqPS3SGl3M0DXXOzbzIbShbMAlZMrdbLLGDV5HoI0EMUM75r5OLS5u0BCw=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><strong>If</strong> there is a configuration such that the throughput is larger than the request arrival rate, <strong>then</strong> choose the configuration that has minimum inference latency while making sure the throughput is larger than arrival rate. <strong>Otherwise</strong>, find the C for maximum throughput.</p>
 <p><strong>After</strong> adjusting the configuration, allocate or free instances.</p>
@@ -369,7 +369,50 @@
 <li>However, we only decided the parallelization structure.</li>
 <li>How should us decide how to map the physical instances to logical positions?</li>
 </ul>
-<h3 id="Device-Mapper"><strong>Device Mapper</strong></h3>
+<h4 id="Device-Mapper"><strong>Device Mapper</strong></h4>
+<ul>
+<li><strong>Goal</strong>: find the matching strategy that maximize reusable context (i.e., edge weight sum)</li>
+</ul>
+<p><img src="https://lh7-us.googleusercontent.com/uIwqLoTUUz66a9PkQfiKllRlJP7g_mo73tNQUaVjOgzxk2FGEubdwFaqxXFLd-CJTUpHL-xhb7aZgu2RdAtBXWbS-1_l_RPJRRJwtD8xm5-b1d_sXZGh0ZbjowZCw59DEeYrJeWKPAxD65Z8Hl4A6kYy_A=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li><strong>Approach</strong>: *KM (*<em>Kuhn-Munkres) Algorithm</em> for Bipartite Graph Maximum Weight Matching</li>
+</ul>
+<p><img src="/.com//D:%5Cdingblog%5Csource%5Cimg%5Cspotserve%5Cbigraph.png" srcset="/img/loading.gif" lazyload alt></p>
+<p>edges: e(u, v) indicates reusable parameters and caches when mapping GPU u to position v.</p>
+<h4 id="Migration-Planner"><strong>Migration Planner</strong></h4>
+<p><img src="https://lh7-us.googleusercontent.com/yUY4QY3JBuc3frOpU9igRxgFR7OXxeromn776cGPdnrL47ib7u-Ixyp4WK22dylnd_ehyGMxLcHoikY0isDt18P4eeiCbd2sNgwIxJj3LJfo8dnhQQZwF6fTUidE8uEnhKw0Aspop76el-NK5_jqDSmHZQ=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ol>
+<li>From front layers (0, 1) to back layers (N), find the layers whose context do not exceed the buffer size and prioritize migration of these layers.</li>
+<li>For other layers, add them to the sequence by the order of instance buffer memory usage</li>
+<li>After we have the sequence, sequentially migrate the layers in this sequence. If all layers of a specific stage is migrated, start running this stage.</li>
+</ol>
+<h3 id="Just-in-time-Arrangement">Just-in-time Arrangement</h3>
+<p>What should we do if we receive a preemption/acquisition notification while there are still requests running/waiting?</p>
+<ul>
+<li>Immediately suspend and migrate? =&gt; high inference latency</li>
+<li>Finish all requests? =&gt; no enough time for migration</li>
+<li><strong>SpotServe</strong>: for preemption, maximize token generation (since migration happens during the grace period); for acquisition, minimize token generation when exploiting the whole grace period (since migration happens after the grace period)</li>
+</ul>
+<h2 id="Experimental-Evaluation">Experimental Evaluation</h2>
+<h3 id="Comparison">Comparison</h3>
+<ul>
+<li>
+<p>Stable workload</p>
+</li>
+<li>
+<p>P99: latency at the 99th percentage (99% latency &lt;= this value)</p>
+</li>
+<li>
+<p>Baselines: FasterTransformer (reparallelization but no cocntext migration, rerouting with pre-defined config)</p>
+<p><img src="https://lh7-us.googleusercontent.com/8wenNdhNJT1VmN05N0gxrNKqk8qT9xCcZa3uZPePmr35xKSSD1U570V3iEtrlei8-zknw3xUJ4sytACMj_iX-t4Q04UHQyTt6tYhYdXreqnYWplghxE_KIWClBYdpqLAyr5ezVns4JNFY-MY1sQ1efa9zw=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+<li>
+<p>Fluctuating Workload</p>
+<p><img src="https://lh7-us.googleusercontent.com/bpEki4DA2MEqzMuhU1nxpj5XOjf6AsjtdWnMpA7DN8GdnbcQd5wVhbgjc6WDs8mFIWf75OlkEMxxBDJ_GAMFwfaL5_imDBvvXSgHAM3jSFm9yIx8n6qqT7F-M2tRLfhvQO3mxoAxPV_3N2msXSgp2ik-Xw=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<h3 id="Ablation">Ablation</h3>
+<p><img src="https://lh7-us.googleusercontent.com/dpK-WvVOgT4EO9BgpTm3HpxJu1DS_IzSShStV--RNiDmU9RROzZobzd9yWV1HvPpaJ0d-dqn5zp1nXjWn1nbctUI-H46em5TNu3Bz5WdQBKqOrVV_HcIqzoqDdxZkU2A3QGr1cK9LrETho7MrDXPRqKeHg=s2048" srcset="/img/loading.gif" lazyload alt="img"></p>
 
                 
               </div>
