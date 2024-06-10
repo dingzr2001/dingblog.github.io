@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>&lt;数据结构/算法&gt; 1.快速排序Quick Sort</title>
+    <link href="/2024/06/12/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8FQuick%20Sort/"/>
+    <url>/2024/06/12/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8FQuick%20Sort/</url>
+    
+    <content type="html"><![CDATA[<h1>快速排序Quick Sort</h1><p>事实上对于快速排序一直以来都是懵懵的，苦想后终于茅塞顿开。</p><p>首先，快速排序是一个递归的算法，核心思想是在一个序列中选择一个分界值（Pivot），将该序列中的元素划分为左右两部分，左边的元素均小于分界值，右边的元素大于分界值。然后对左右两边分别递归地执行此操作。</p><p>那么怎样执行这个“分成左右两边”的操作呢？目前最简洁的方法是这样的。</p><ul><li>设立一个快指针fast，一个慢指针slow。快指针用于循环，慢指针用于指向一个位置。</li><li>指向的位置是什么呢？就是下一次遇到比pivot值小的元素时，应该把它填在哪里。</li><li>那么这个位置怎么确定呢，很简单，从序列最左边开始，每找到一个比pivot值小的元素就放到左边，然后往右挪一下就行了。对应到slow指针也就是每次往slow指针位置放，然后slow++。</li><li>那么原来位置上的元素怎么办呢？直接和当前这个快指针指向的元素，也就是那个比pivot值小的元素，互换位置就好了。</li><li>这样做，遍历一遍后，比pivot小的值都往左边不断地堆放，最后全在左边了。剩下的比pivot大的值自然就跑到右边去了。</li><li>但是还有一个pivot值没有处理，这个值往往是选择序列最左边或者最右边的元素，我们在刚刚的遍历中直接略过。也就是如果选了最左边的元素，一开始遍历就直接从第二个元素开始了。如果是最右边的元素，遍历的时候就到倒数第二个元素停止。</li><li>最后剩下的slow元素，很明显是要放到中间的。注意到这个时候slow指针正好就在中间，交换位置即可。这里有两种情况：<ul><li>一种是每次交换后slow再++，也就是下一次放就是直接放到slow的位置。这种情况下遍历结束后的slow应该是指向第一个比pivot大的元素，也就是右边序列的最左端。如果pivot是左端点则需要和slow-1位置互换，这样把slow-1也就是最后一个比pivot小的值换到最前面，如果pivot是右端点则直接和slow互换，这样把第一个比pivot大的值换到最后面。</li><li>第二种是先slow++再交换，这样每一次交换前需要先把slow++挪到下一个位置。这种情况下遍历结束后的slow就是最后一个比pivot小的元素。对于两种pivot位置和第一种情况同理。</li></ul></li></ul><p>以下是C++代码：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">partition</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;arr, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-type">int</span> pivot = arr[right];<br>    <span class="hljs-type">int</span> slow = left;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> fast = left; fast &lt; right; fast++)&#123;<br>        <span class="hljs-keyword">if</span>(arr[fast] &lt; pivot)&#123;<br>            <span class="hljs-type">int</span> tmp = arr[slow];<br>            arr[slow] = arr[fast];<br>            arr[fast] = tmp;<br>            slow++;<br>        &#125;<br>    &#125;<br>    arr[right] = arr[slow];<br>    arr[slow] = pivot;<br>    <span class="hljs-keyword">return</span> slow;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">quickSort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;arr, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-type">int</span> p = <span class="hljs-built_in">partition</span>(arr, left, right);<br>    <span class="hljs-built_in">quickSort</span>(arr, left, p<span class="hljs-number">-1</span>);<br>    <span class="hljs-built_in">quickSort</span>(arr, p+<span class="hljs-number">1</span>, right);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>  vector&lt;<span class="hljs-type">int</span>&gt; arr = &#123;<span class="hljs-number">7</span>, <span class="hljs-number">9</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>&#125;;<br>  <span class="hljs-built_in">quickSort</span>(arr, <span class="hljs-number">0</span>, arr.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>);<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; arr.<span class="hljs-built_in">size</span>(); i++)&#123;<br>    cout &lt;&lt; arr[i] &lt;&lt; <span class="hljs-string">&quot;,&quot;</span>;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure><p>其实就是这么简单的道理，不知道自己以前为什么那么久没搞明白，还是太菜了。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Algorithm</category>
+      
+      <category>C++</category>
+      
+      <category>job</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>sort</tag>
+      
+      <tag>algorithm</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>C++ STL常用容器及使用方法</title>
     <link href="/2024/03/24/CppSTL/"/>
     <url>/2024/03/24/CppSTL/</url>
