@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>&lt;数据结构/算法&gt; 2.归并排序Merge Sort</title>
+    <link href="/2024/06/13/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8FMergeSort/"/>
+    <url>/2024/06/13/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8FMergeSort/</url>
+    
+    <content type="html"><![CDATA[<h1>归并排序Merge Sort</h1><p>归并排序个人感觉理解起来没什么难度，主要就是一个递归地合并子序列的过程，直接写代码，在代码特殊的地方说明一下</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">merge</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;arr, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> mid, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">tmp</span><span class="hljs-params">(right - left + <span class="hljs-number">1</span>)</span></span>;<br>    <span class="hljs-type">int</span> pl = left, pr = mid;<br>    <span class="hljs-keyword">while</span>(pl &lt;= mid - <span class="hljs-number">1</span> &amp;&amp; pr &lt;= right)&#123;<br>        <span class="hljs-keyword">if</span>(arr[pl] &lt; arr[pr])&#123;<br>            tmp.<span class="hljs-built_in">push_back</span>(arr[pl++]);<br>        &#125;<br>        <span class="hljs-keyword">else</span>&#123;<br>            tmp.<span class="hljs-built_in">push_back</span>(arr[pr++]);<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">//下面这两个循环只会执行一个，因为不可能左右子列都有元素剩余</span><br>    <span class="hljs-keyword">while</span>(pl &lt;= mid - <span class="hljs-number">1</span>)&#123;<br>        tmp.<span class="hljs-built_in">push_back</span>(arr[pl++]);<br>    &#125;<br>    <span class="hljs-keyword">while</span>(pr &lt;= right)&#123;<br>        tmp.<span class="hljs-built_in">push_back</span>(arr[pr++]);<br>    &#125;<br>    <span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = left; i &lt;= right; i++)&#123;<br>        arr[i] = tmp[j++];<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">mergeSort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;arr, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(left &gt;= right) <span class="hljs-keyword">return</span>;<br>    <span class="hljs-type">int</span> mid = (left + right) / <span class="hljs-number">2</span>;<br>    <span class="hljs-built_in">mergeSort</span>(arr, left, mid - <span class="hljs-number">1</span>);<br>    <span class="hljs-built_in">mergeSort</span>(arr, mid, right);<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Algorithm</category>
+      
+      <category>C++</category>
+      
+      <category>job</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>sort</tag>
+      
+      <tag>algorithm</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>&lt;数据结构/算法&gt; 1.快速排序Quick Sort</title>
     <link href="/2024/06/12/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8FQuick%20Sort/"/>
     <url>/2024/06/12/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8FQuick%20Sort/</url>
