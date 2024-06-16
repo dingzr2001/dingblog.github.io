@@ -16,19 +16,19 @@
   <meta name="author" content="dingzr2001">
   <meta name="keywords" content="">
   
-    <meta name="description" content="归并排序Merge Sort 归并排序个人感觉理解起来没什么难度，主要就是一个递归地合并子序列的过程，直接写代码，在代码特殊的地方说明一下 12345678910111213141516171819202122232425262728293031323334#include&lt;bits&#x2F;stdc++.h&gt;#include&lt;vector&gt;using namespace std;">
+    <meta name="description" content="[LeetCode hot 100] 46. 全排列Permutation 拿到这道题的时候总感觉答案就在嘴边，但是写了写就感觉怎么都不对劲，原因是没有意识到这是一个回溯题。所谓回溯算法，百度百科给出的定义是：  回溯法也称试探法，它的基本思想是：从问题的某一种状态（初始状态）出发，搜索从这种状态出发所能达到的所有“状态”，当一条路走到“尽头”的时候（不能再前进），再后退一步或若干步，从另一种可能">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt;数据结构&#x2F;算法&gt; 2.归并排序Merge Sort">
-<meta property="og:url" content="http://example.com/2024/06/13/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8FMergeSort/index.html">
+<meta property="og:url" content="http://example.com/2024/06/16/lc_46_permutation/index.html">
 <meta property="og:site_name" content="DZRHome">
-<meta property="og:description" content="归并排序Merge Sort 归并排序个人感觉理解起来没什么难度，主要就是一个递归地合并子序列的过程，直接写代码，在代码特殊的地方说明一下 12345678910111213141516171819202122232425262728293031323334#include&lt;bits&#x2F;stdc++.h&gt;#include&lt;vector&gt;using namespace std;">
+<meta property="og:description" content="[LeetCode hot 100] 46. 全排列Permutation 拿到这道题的时候总感觉答案就在嘴边，但是写了写就感觉怎么都不对劲，原因是没有意识到这是一个回溯题。所谓回溯算法，百度百科给出的定义是：  回溯法也称试探法，它的基本思想是：从问题的某一种状态（初始状态）出发，搜索从这种状态出发所能达到的所有“状态”，当一条路走到“尽头”的时候（不能再前进），再后退一步或若干步，从另一种可能">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/img/algorithm.png">
-<meta property="article:published_time" content="2024-06-12T17:50:00.000Z">
-<meta property="article:modified_time" content="2024-06-12T09:45:35.909Z">
+<meta property="article:published_time" content="2024-06-15T17:50:00.000Z">
+<meta property="article:modified_time" content="2024-06-16T16:49:20.598Z">
 <meta property="article:author" content="dingzr2001">
 <meta property="article:tag" content="algorithm">
-<meta property="article:tag" content="sort">
+<meta property="article:tag" content="backtrack">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://example.com/img/algorithm.png">
   
@@ -213,8 +213,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-06-13 01:50" pubdate>
-          June 13, 2024 am
+        <time datetime="2024-06-16 01:50" pubdate>
+          June 16, 2024 am
         </time>
       </span>
     
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          848 words
+          1.2k words
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          8 mins
+          11 mins
         
       </span>
     
@@ -289,9 +289,15 @@
             
               <div class="markdown-body">
                 
-                <h1>归并排序Merge Sort</h1>
-<p>归并排序个人感觉理解起来没什么难度，主要就是一个递归地合并子序列的过程，直接写代码，在代码特殊的地方说明一下</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">merge</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;arr, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> mid, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">tmp</span><span class="hljs-params">(right - left + <span class="hljs-number">1</span>)</span></span>;<br>    <span class="hljs-type">int</span> pl = left, pr = mid;<br>    <span class="hljs-keyword">while</span>(pl &lt;= mid - <span class="hljs-number">1</span> &amp;&amp; pr &lt;= right)&#123;<br>        <span class="hljs-keyword">if</span>(arr[pl] &lt; arr[pr])&#123;<br>            tmp.<span class="hljs-built_in">push_back</span>(arr[pl++]);<br>        &#125;<br>        <span class="hljs-keyword">else</span>&#123;<br>            tmp.<span class="hljs-built_in">push_back</span>(arr[pr++]);<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">//下面这两个循环只会执行一个，因为不可能左右子列都有元素剩余</span><br>    <span class="hljs-keyword">while</span>(pl &lt;= mid - <span class="hljs-number">1</span>)&#123;<br>        tmp.<span class="hljs-built_in">push_back</span>(arr[pl++]);<br>    &#125;<br>    <span class="hljs-keyword">while</span>(pr &lt;= right)&#123;<br>        tmp.<span class="hljs-built_in">push_back</span>(arr[pr++]);<br>    &#125;<br>    <span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = left; i &lt;= right; i++)&#123;<br>        arr[i] = tmp[j++];<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">mergeSort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;arr, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(left &gt;= right) <span class="hljs-keyword">return</span>;<br>    <span class="hljs-type">int</span> mid = (left + right) / <span class="hljs-number">2</span>;<br>    <span class="hljs-built_in">mergeSort</span>(arr, left, mid - <span class="hljs-number">1</span>);<br>    <span class="hljs-built_in">mergeSort</span>(arr, mid, right);<br>&#125;<br></code></pre></td></tr></table></figure>
+                <h1>[LeetCode hot 100] 46. 全排列Permutation</h1>
+<p>拿到这道题的时候总感觉答案就在嘴边，但是写了写就感觉怎么都不对劲，原因是没有意识到这是一个回溯题。所谓回溯算法，百度百科给出的定义是：</p>
+<blockquote>
+<p>回溯法也称试探法，它的基本思想是：从问题的某一种状态（初始状态）出发，搜索从这种状态出发所能达到的所有“状态”，当一条路走到“尽头”的时候（不能再前进），再后退一步或若干步，从另一种可能“状态”出发，继续搜索，直到所有的“路径”（状态）都试探过。这种不断“前进”、不断“回溯”寻找解的方法，就称作“回溯法”。</p>
+</blockquote>
+<p>回溯算法最大的特征就是它是自顶向下的，也就是从顶部的什么都没有，慢慢往深处探索，在最底端得到答案。</p>
+<p>对于这道题而言，一开始是什么都不知道的，假如说有个序列[1, 2, 3]，首先确定出第一个数，可以是[1]，可以是[2]，可以是[3]。当第一个数为1时，再确定第二个数，可以是[1, 2]或[1, 3]，然后确定第三个数。当我们确定第三个数之后的时候，实际上是已经得到了两个答案，就应该把这两个答案立即加到答案集合中。也就是说，我们写出来虽然也是递归的形势，但是只是用递归实现了类似栈的回退作用，答案并不是在最顶层得到，而是在最底层得到。</p>
+<p>具体如何操作请见代码。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">permute</span>(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums) &#123;<br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; ans;<br>        vector&lt;<span class="hljs-type">int</span>&gt; cur;<br>        <span class="hljs-type">int</span>* visited = <span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[nums.<span class="hljs-built_in">size</span>()]&#123;<span class="hljs-number">0</span>&#125;;<br>        <span class="hljs-built_in">backtrack</span>(nums, cur, visited, ans);<br>        <span class="hljs-keyword">return</span> ans;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">backtrack</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, vector&lt;<span class="hljs-type">int</span>&gt; cur, <span class="hljs-type">int</span>* visited, vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt;&amp; ans)</span></span>&#123;<br>        <span class="hljs-keyword">if</span>(cur.<span class="hljs-built_in">size</span>() == nums.<span class="hljs-built_in">size</span>()) &#123;<br>            <span class="hljs-comment">//探到最底层，得到一个答案，放到结果中</span><br>            ans.<span class="hljs-built_in">push_back</span>(cur);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            <span class="hljs-keyword">if</span>(visited[i] == <span class="hljs-number">0</span>)&#123;<br>                <span class="hljs-comment">//往下探索一层</span><br>                cur.<span class="hljs-built_in">push_back</span>(nums[i]);<br>                visited[i] = <span class="hljs-number">1</span>;<br>                <span class="hljs-built_in">backtrack</span>(nums, cur, visited, ans);<br>                <span class="hljs-comment">//回到当前这一层</span><br>                visited[i] = <span class="hljs-number">0</span>;<br>                cur.<span class="hljs-built_in">pop_back</span>();<br>                <br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -341,7 +347,7 @@
       
         <a href="/tags/algorithm/">#algorithm</a>
       
-        <a href="/tags/sort/">#sort</a>
+        <a href="/tags/backtrack/">#backtrack</a>
       
     </div>
   
@@ -354,7 +360,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>&lt;数据结构/算法&gt; 2.归并排序Merge Sort</div>
-      <div>http://example.com/2024/06/13/归并排序MergeSort/</div>
+      <div>http://example.com/2024/06/16/lc_46_permutation/</div>
     </div>
     <div class="license-meta">
       
@@ -366,7 +372,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>June 13, 2024</div>
+          <div>June 16, 2024</div>
         </div>
       
       
@@ -398,7 +404,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/06/16/lc_46_permutation/" title="&lt;数据结构/算法&gt; 2.归并排序Merge Sort">
+                      <a href="/2024/06/16/lc_22_generate_parenthesis/" title="&lt;数据结构/算法&gt; 2.归并排序Merge Sort">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">&lt;数据结构/算法&gt; 2.归并排序Merge Sort</span>
                         <span class="visible-mobile">Previous</span>
@@ -408,8 +414,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/06/12/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8FQuick%20Sort/" title="&lt;数据结构/算法&gt; 1.快速排序Quick Sort">
-                        <span class="hidden-mobile">&lt;数据结构/算法&gt; 1.快速排序Quick Sort</span>
+                      <a href="/2024/06/13/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8FMergeSort/" title="&lt;数据结构/算法&gt; 2.归并排序Merge Sort">
+                        <span class="hidden-mobile">&lt;数据结构/算法&gt; 2.归并排序Merge Sort</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
