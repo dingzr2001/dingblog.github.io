@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-06-19T12:27:33.689Z</updated>
+  <updated>2024-07-28T13:37:20.293Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,153 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>&lt;数据结构/算法&gt; leetcode hot100系列. 239.滑动窗口最大值</title>
+    <link href="http://example.com/2024/07/29/lc_239_%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%9C%80%E5%A4%A7%E5%80%BC/"/>
+    <id>http://example.com/2024/07/29/lc_239_%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%9C%80%E5%A4%A7%E5%80%BC/</id>
+    <published>2024-07-28T17:50:00.000Z</published>
+    <updated>2024-07-28T13:37:20.293Z</updated>
+    
+    <content type="html"><![CDATA[<h1>[LeetCode hot 100] 239. 滑动窗口最大值</h1><p><a href="https://leetcode.cn/problems/sliding-window-maximum/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p><p>非常有趣的一道题。我们首先思考一下，每次窗口移动可能会发生什么事。</p><ol><li>假如移出去的那个数不是之前窗口的最大值，那没问题，直接丢掉就可以。</li><li>假如移出去的恰好就是窗口的最大值，那么把它移走了，新王登基，怎样又快又准地去找这个新王是谁呢？</li></ol><p>我们来看第一种情况，如果这个数不是最大值，说明后面一定存在一个数比它更大。当窗口移动时，由于这个数在前面，所以先被卡掉，但是因为后面还有更大的，所以卡掉它对于窗口的最大值不起任何影响。因此这种数对于结果起不到任何的改变，是窗口中的小透明，我们不需要管它们。</p><p>那么剩下的另一种数就是窗口的后面没有比它大的了，这种才是我们需要考虑的，因为它们是真正关乎到滑动窗口最大值的数。</p><p>我们要记录所有的这种数，这样的单调序列再加上滑动窗口这种每次后面进来一个数，前面出来一个数的结构，非常适合使用单调队列来记录。单调队列中，元素从队头到队尾递减，每次后移一位，就对比新的数和队尾，如果队尾比新数小，就说明队尾是小透明，出队扔掉，再比较新的队尾，也就是本来在队尾的前一位，比队尾大一点，如此循环直到队尾不比新数小，也就是踢到了钢板。这时将新数入队。</p><p>同时，移动窗口会导致原来窗口中的第一位被卡掉，这时如果被卡掉的正好是队头，那说明它恰好是最大的那个，就需要从队头把它出队。（由于可能有重复值，因此队列中需要存储下标，通过下标进行比对）</p><p>每个窗口中最大的元素一定就是当前的队头。</p><p>综合以上，完整代码如下</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">maxSlidingWindow</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> k)</span> </span>&#123;<br>        deque&lt;<span class="hljs-type">int</span>&gt; dq;<br>        <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>;<br>        vector&lt;<span class="hljs-type">int</span>&gt; ans;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>() - k + <span class="hljs-number">1</span>; i++)&#123;<br>            <span class="hljs-keyword">if</span>(i == <span class="hljs-number">0</span>)&#123;<br>                <span class="hljs-comment">//首先建立第一个窗口的优先队列，后续的优先队列都在此基础上调整</span><br>                <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; k; j++)&#123;<br>                    cout&lt;&lt;j&lt;&lt;endl;<br>                    <span class="hljs-keyword">if</span>(dq.<span class="hljs-built_in">empty</span>() || nums[dq.<span class="hljs-built_in">back</span>()] &gt;= nums[j])&#123;<br>                        dq.<span class="hljs-built_in">push_back</span>(j);<br>                    &#125; <span class="hljs-keyword">else</span>&#123;<br>                        <span class="hljs-keyword">while</span>(!dq.<span class="hljs-built_in">empty</span>() &amp;&amp; nums[dq.<span class="hljs-built_in">back</span>()] &lt; nums[j])&#123;<br>                            dq.<span class="hljs-built_in">pop_back</span>();<br>                        &#125;<br>                        dq.<span class="hljs-built_in">push_back</span>(j);<br>                    &#125;<br>                &#125;<br>                ans.<span class="hljs-built_in">push_back</span>(nums[dq.<span class="hljs-built_in">front</span>()]);<br>            &#125; <span class="hljs-keyword">else</span>&#123;<br>                <span class="hljs-keyword">if</span>(!dq.<span class="hljs-built_in">empty</span>() &amp;&amp; dq.<span class="hljs-built_in">front</span>() == i - <span class="hljs-number">1</span>)&#123;<br>                    dq.<span class="hljs-built_in">pop_front</span>();<br>                &#125;<br>                <span class="hljs-keyword">if</span>(dq.<span class="hljs-built_in">empty</span>() || nums[dq.<span class="hljs-built_in">back</span>()] &gt;= nums[i+k<span class="hljs-number">-1</span>])&#123;<br>                    dq.<span class="hljs-built_in">push_back</span>(i+k<span class="hljs-number">-1</span>);<br>                &#125; <span class="hljs-keyword">else</span>&#123;<br>                    <span class="hljs-keyword">while</span>(!dq.<span class="hljs-built_in">empty</span>() &amp;&amp; nums[dq.<span class="hljs-built_in">back</span>()] &lt; nums[i+k<span class="hljs-number">-1</span>])&#123;<br>                        dq.<span class="hljs-built_in">pop_back</span>();<br>                    &#125;<br>                    dq.<span class="hljs-built_in">push_back</span>(i+k<span class="hljs-number">-1</span>);<br>                &#125;<br>                ans.<span class="hljs-built_in">push_back</span>(nums[dq.<span class="hljs-built_in">front</span>()]);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> ans;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;[LeetCode hot 100] 239. 滑动窗口最大值&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://leetcode.cn/problems/sliding-window-maximum/description/?envType=study-plan-v2&amp;</summary>
+      
+    
+    
+    
+    <category term="Algorithm" scheme="http://example.com/categories/Algorithm/"/>
+    
+    <category term="C++" scheme="http://example.com/categories/Algorithm/C/"/>
+    
+    <category term="job" scheme="http://example.com/categories/Algorithm/C/job/"/>
+    
+    
+    <category term="algorithm" scheme="http://example.com/tags/algorithm/"/>
+    
+    <category term="slide-window" scheme="http://example.com/tags/slide-window/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>&lt;数据结构/算法&gt; leetcode hot100系列. 110.盛水最多的容器</title>
+    <link href="http://example.com/2024/07/25/lc_110_%E7%9B%9B%E6%B0%B4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AE%B9%E5%99%A8/"/>
+    <id>http://example.com/2024/07/25/lc_110_%E7%9B%9B%E6%B0%B4%E6%9C%80%E5%A4%9A%E7%9A%84%E5%AE%B9%E5%99%A8/</id>
+    <published>2024-07-24T17:50:00.000Z</published>
+    <updated>2024-07-24T17:28:02.118Z</updated>
+    
+    <content type="html"><![CDATA[<h1>[LeetCode hot 100] 110. 盛水最多的容器</h1><p><a href="https://leetcode.cn/problems/container-with-most-water/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p><p>最烦这种题，因为每次都感觉自己那么接近答案，就是做不出来，像个傻子一样。</p><p>怎样思考这个问题？首先我们从左往右看一看，假如有两根柱子，左边的柱子比右边的高，那么当选取这两个柱子之一作为左边的容器壁时，右边的柱子是一定会输的。</p><p>考虑数组的左右两个端点，假如左边的柱子更矮，那么右边的柱子无论再怎么高也没有用，这就是所谓的木桶效应。所以事实上以最左侧柱子为左端点的容器都不需要看了，因为不会有比现在更大的了。这也就是说，最左侧的柱子被“pass”了。</p><p>那么接下来就算一下这个容器的容量，然后把最左侧的柱子扔了，换第二个，也就是left指针右移。对于新的左右端点，运用同样的思路，排掉较短的那一根，如此循环直到左右端点相遇。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">maxArea</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; height)</span> </span>&#123;<br>        <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>, right = height.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<br>        <span class="hljs-type">int</span> maxVolume = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span>(left &lt; right)&#123;<br>            <span class="hljs-type">int</span> curVolume = (right - left) * <span class="hljs-built_in">min</span>(height[left], height[right]);<br>            maxVolume = <span class="hljs-built_in">max</span>(maxVolume, curVolume);<br>            <span class="hljs-keyword">if</span>(height[left] &gt;= height[right])&#123;<br>                right--;<br>            &#125; <span class="hljs-keyword">else</span>&#123;<br>                left++;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> maxVolume;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;[LeetCode hot 100] 110. 盛水最多的容器&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://leetcode.cn/problems/container-with-most-water/description/?envType=study-plan-</summary>
+      
+    
+    
+    
+    <category term="Algorithm" scheme="http://example.com/categories/Algorithm/"/>
+    
+    <category term="C++" scheme="http://example.com/categories/Algorithm/C/"/>
+    
+    <category term="job" scheme="http://example.com/categories/Algorithm/C/job/"/>
+    
+    
+    <category term="algorithm" scheme="http://example.com/tags/algorithm/"/>
+    
+    <category term="two-pointers" scheme="http://example.com/tags/two-pointers/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>&lt;数据结构/算法&gt; leetcode hot100系列. 22.括号生成Generate Parenthesis</title>
+    <link href="http://example.com/2024/07/25/lc_128_%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%BA%8F%E5%88%97/"/>
+    <id>http://example.com/2024/07/25/lc_128_%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E5%BA%8F%E5%88%97/</id>
+    <published>2024-07-24T17:50:00.000Z</published>
+    <updated>2024-07-24T12:44:42.968Z</updated>
+    
+    <content type="html"><![CDATA[<h1>[LeetCode hot 100] 128. 最长连续序列</h1><p><a href="https://leetcode.cn/problems/longest-consecutive-sequence/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p><p>遇到这种题，首先想一想，作为一个人类，我们怎么思考这个问题。我们肯定是每看到一个数就去整个序列里面找有没有挨着的，如果有，那就顺着继续找，最后一个数一个数地摘出来，算一个长度对吗？</p><p>简化这个过程，我们不需要每个数都找，而是只需要从一个连续序列开头的那个数往后找就行。</p><ol><li>首先先遍历一下这个数组，并且放入集合中，一来是去重，二来是方便后面的查找。</li><li>遍历这个集合，对于每个元素e，如果集合中存在比它小1的元素e-1，那就先不管这个数，因为肯定不是一个连续序列的开头。</li><li>如果集合中不存在e-1，就说明e一定是一个连续序列的开头，那么就开始找e+1, e+2, …, e+n，直到e+n找不到了，说明序列到此结束，当前序列的长度就是n。</li><li>最后遍历完之后输出序列长度的最大值就行。</li></ol><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">longestConsecutive</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        set&lt;<span class="hljs-type">int</span>&gt; numSet;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span>&amp; num : nums)&#123;<br>            numSet.<span class="hljs-built_in">emplace</span>(num);<br>        &#125;<br>        <span class="hljs-type">int</span> maxLength = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span>&amp; num : numSet)&#123;<br>            <span class="hljs-keyword">if</span>(numSet.<span class="hljs-built_in">count</span>(num<span class="hljs-number">-1</span>))<br>                <span class="hljs-keyword">continue</span>;<br>            <span class="hljs-type">int</span> len = <span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">while</span>(numSet.<span class="hljs-built_in">count</span>(num+len))&#123;<br>                len++;<br>            &#125;<br>            maxLength = <span class="hljs-built_in">max</span>(maxLength, len);<br>        &#125;<br>        <span class="hljs-keyword">return</span> maxLength;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;[LeetCode hot 100] 128. 最长连续序列&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://leetcode.cn/problems/longest-consecutive-sequence/?envType=study-plan-v2&amp;amp;env</summary>
+      
+    
+    
+    
+    <category term="Algorithm" scheme="http://example.com/categories/Algorithm/"/>
+    
+    <category term="C++" scheme="http://example.com/categories/Algorithm/C/"/>
+    
+    <category term="job" scheme="http://example.com/categories/Algorithm/C/job/"/>
+    
+    
+    <category term="algorithm" scheme="http://example.com/tags/algorithm/"/>
+    
+    <category term="hash" scheme="http://example.com/tags/hash/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>&lt;数据结构/算法&gt; leetcode hot100系列. 22.括号生成Generate Parenthesis</title>
+    <link href="http://example.com/2024/07/25/lc_49_%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D%E5%88%86%E7%BB%84/"/>
+    <id>http://example.com/2024/07/25/lc_49_%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D%E5%88%86%E7%BB%84/</id>
+    <published>2024-07-24T17:50:00.000Z</published>
+    <updated>2024-07-24T09:57:22.222Z</updated>
+    
+    <content type="html"><![CDATA[<h1>[LeetCode hot 100] 49. 字母异位词分组</h1><p><a href="https://leetcode.cn/problems/group-anagrams/solutions/520469/zi-mu-yi-wei-ci-fen-zu-by-leetcode-solut-gyoc/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p><p>这道题比较直觉的做法就是先对每个词排序，因为不同异位词按照字母排序之后的异位词就是统一的了，因此将这个排序后的词作为map的键，查找map时如果存在这个键，就按照map中记录的位置去找这个键对应的异位词分组在返回结果中的位置，并且在这个异位词分组后面加上当前字符串。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    vector&lt;vector&lt;string&gt;&gt; <span class="hljs-built_in">groupAnagrams</span>(vector&lt;string&gt;&amp; strs) &#123;<br>        vector&lt;vector&lt;string&gt;&gt; ans;<br>        map&lt;string, <span class="hljs-type">int</span>&gt; posMap;<br>        <span class="hljs-type">int</span> pos = <span class="hljs-number">0</span>;<span class="hljs-comment">//分组的下一个下标</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span>&amp; str : strs)&#123;<br>            string cur = str;<br>            <span class="hljs-built_in">sort</span>(cur.<span class="hljs-built_in">begin</span>(), cur.<span class="hljs-built_in">end</span>());<br>            <span class="hljs-keyword">if</span>(posMap.<span class="hljs-built_in">find</span>(cur) == posMap.<span class="hljs-built_in">end</span>())&#123;<br>                posMap.<span class="hljs-built_in">emplace</span>(cur, pos);<br>                vector&lt;string&gt; anagramList;<br>                anagramList.<span class="hljs-built_in">push_back</span>(str);<br>                ans.<span class="hljs-built_in">push_back</span>(anagramList);<br>                pos++;<br>            &#125; <span class="hljs-keyword">else</span>&#123;<br>                <span class="hljs-type">int</span> curPos = posMap.<span class="hljs-built_in">find</span>(cur)-&gt;second;<br>                ans[curPos].<span class="hljs-built_in">push_back</span>(str);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> ans;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;[LeetCode hot 100] 49. 字母异位词分组&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://leetcode.cn/problems/group-anagrams/solutions/520469/zi-mu-yi-wei-ci-fen-zu-by-l</summary>
+      
+    
+    
+    
+    <category term="Algorithm" scheme="http://example.com/categories/Algorithm/"/>
+    
+    <category term="C++" scheme="http://example.com/categories/Algorithm/C/"/>
+    
+    <category term="job" scheme="http://example.com/categories/Algorithm/C/job/"/>
+    
+    
+    <category term="algorithm" scheme="http://example.com/tags/algorithm/"/>
+    
+    <category term="hash" scheme="http://example.com/tags/hash/"/>
+    
+  </entry>
+  
+  <entry>
+    <title></title>
+    <link href="http://example.com/2024/07/05/%E4%BD%BF%E7%94%A8vue%E5%92%8Celementui%E9%81%87%E5%88%B0%E7%9A%84%E5%90%84%E7%A7%8D%E5%9D%91/"/>
+    <id>http://example.com/2024/07/05/%E4%BD%BF%E7%94%A8vue%E5%92%8Celementui%E9%81%87%E5%88%B0%E7%9A%84%E5%90%84%E7%A7%8D%E5%9D%91/</id>
+    <published>2024-07-04T18:37:01.614Z</published>
+    <updated>2024-07-11T03:33:41.155Z</updated>
+    
+    <content type="html"><![CDATA[<h1>使用vue和elementui遇到的各种坑</h1><h3 id="正则表达式报错">正则表达式报错</h3><p>一般是因为其中的反斜杠解析错误，在后面加上</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span> eslint-disable-line<br></code></pre></td></tr></table></figure><p>这个注释就好</p><h3 id="el-form几种表单验证方式">el-form几种表单验证方式</h3><p><a href="https://blog.csdn.net/weixin_45046532/article/details/137624361">https://blog.csdn.net/weixin_45046532/article/details/137624361</a></p><h3 id="常用表单域验证正则匹配">常用表单域验证正则匹配</h3><p><a href="https://blog.csdn.net/2401_84092423/article/details/137700320">https://blog.csdn.net/2401_84092423/article/details/137700320</a></p><h3 id="嵌套el-form-item">嵌套el-form-item</h3><p><a href="https://blog.csdn.net/weixin_69670563/article/details/135880729">https://blog.csdn.net/weixin_69670563/article/details/135880729</a></p><h3 id="el-form里出现一个item包含多个输入，怎样进行表单域验证？">el-form里出现一个item包含多个输入，怎样进行表单域验证？</h3><h3 id="邮箱验证">邮箱验证</h3><figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs taggerscript">/^<span class="hljs-symbol">\\</span>s*<span class="hljs-symbol">\\</span>w+(?:<span class="hljs-symbol">\\</span>.&#123;0,1&#125;[<span class="hljs-symbol">\\</span>w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*<span class="hljs-symbol">\\</span>.[a-zA-Z]+<span class="hljs-symbol">\\</span>s*$/<br></code></pre></td></tr></table></figure><p>/^\s*\w+(?:\.{0,1}[\w-]+)<em>@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)</em>\.[a-zA-Z]+\s*$/</p><p>87558353</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;使用vue和elementui遇到的各种坑&lt;/h1&gt;
+&lt;h3 id=&quot;正则表达式报错&quot;&gt;正则表达式报错&lt;/h3&gt;
+&lt;p&gt;一般是因为其中的反斜杠解析错误，在后面加上&lt;/p&gt;
+&lt;figure class=&quot;highlight awk&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>&lt;数据结构/算法&gt; 我一定要学会【堆】-第k大</title>
@@ -139,9 +286,9 @@
     <category term="job" scheme="http://example.com/categories/Algorithm/C/job/"/>
     
     
-    <category term="sort" scheme="http://example.com/tags/sort/"/>
-    
     <category term="algorithm" scheme="http://example.com/tags/algorithm/"/>
+    
+    <category term="sort" scheme="http://example.com/tags/sort/"/>
     
   </entry>
   
@@ -171,9 +318,9 @@
     <category term="job" scheme="http://example.com/categories/Algorithm/C/job/"/>
     
     
-    <category term="sort" scheme="http://example.com/tags/sort/"/>
-    
     <category term="algorithm" scheme="http://example.com/tags/algorithm/"/>
+    
+    <category term="sort" scheme="http://example.com/tags/sort/"/>
     
   </entry>
   
@@ -473,55 +620,6 @@
 &lt;hr&gt;
 &lt;h1&gt;CNN: Convolution?&lt;/h1&gt;
 &lt;p&gt;Now I am at chapter &lt;em&gt;convolutional neural network&lt;/em&gt;. There is a formula with many subscripts:&lt;</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Covariate Shift, Label Shift and Concept Shift</title>
-    <link href="http://example.com/2023/01/30/[Dive%20into%20Deep%20Learning]%20Covariate%20Shift,%20Label%20Shift%20and%20Concept%20Shift/"/>
-    <id>http://example.com/2023/01/30/[Dive%20into%20Deep%20Learning]%20Covariate%20Shift,%20Label%20Shift%20and%20Concept%20Shift/</id>
-    <published>2023-01-29T16:43:00.000Z</published>
-    <updated>2023-01-29T09:03:44.045Z</updated>
-    
-    <content type="html"><![CDATA[<h1>[Dive into Deep Learning] Covariate Shift, Label Shift and Concept Shift</h1><p>When studying distribution shift, these concepts kept confusing me for a long time. After searching they finally become clearer.</p><h2 id="Covariate-Shift">Covariate Shift</h2><p>First, what exactly is a <strong>covariate</strong> in machine learning? Well, after searching I found that covariates in statistics corresponds with features in machine learning, which means that covariate shift is actually the shift of features. In many cases, the features of test datasets might differ from those of the training data sets, yet the labels remain the same. For example, one model is trained with a set of real dog pictures, but it might be required to distinguish a comic dog like Snoopy. The model has never seen Snoopy-like cartoon dogs before, and such dogs have different distribution of features and labels with real dogs, but they share the same label: dog. Such a shift of distribution is called <strong>covariate shift</strong>.</p><h2 id="Label-Shift">Label Shift</h2><p>Label shift is exactly the opposite of covariate shift. Here is what I found at <strong><a href="https://towardsdatascience.com">https://towardsdatascience.com</a></strong>, written(or quoted) by Dr. Matthew Stewart:</p><blockquote><p>Prior probability shift appears only in Y-&gt;X problems, and is defined as the case where P~tra~(x|y) = P~tst~(x|y) and P~tra~(y) ≠ P~tst~(y).</p></blockquote><p>So therefore the example of diseases and symptoms makes sense. We want to predict disease by symptoms, so ‘symptoms’ is X, and ‘diseases’ is Y. Apparently diseases cause symptoms, so this is a typical Y-&gt;X case. The distribution of diseases is not always the same, since diseases occur at different rates in different seasons, so the distribution of Y changes. This is a label shift.</p><h2 id="Concept-Shift">Concept Shift</h2><p>Concept shift is different, it is the mere change of P(y|x). Let’s assume there was once a type of medicine, but it was later redefined as a type of beverage by FDA, though its ingredients remains the same. So a model developed at the earlier period trying to classify medicine and beverage by the ingredients may not work well later.</p><p>That is my preliminary understanding of distribution shifts in this book. There’s still some ambiguity though, and I’ll keep working on that.</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;[Dive into Deep Learning] Covariate Shift, Label Shift and Concept Shift&lt;/h1&gt;
-&lt;p&gt;When studying distribution shift, these concepts kept c</summary>
-      
-    
-    
-    
-    <category term="machine learning" scheme="http://example.com/categories/machine-learning/"/>
-    
-    <category term="Dive into Deep Learning-Notes" scheme="http://example.com/categories/machine-learning/Dive-into-Deep-Learning-Notes/"/>
-    
-    
-    <category term="machine learning" scheme="http://example.com/tags/machine-learning/"/>
-    
-    <category term="distribution shift" scheme="http://example.com/tags/distribution-shift/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="http://example.com/2022/09/28/hello-world/"/>
-    <id>http://example.com/2022/09/28/hello-world/</id>
-    <published>2022-09-28T01:07:01.838Z</published>
-    <updated>2022-09-28T01:07:01.838Z</updated>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start">Quick Start</h2><h3 id="Create-a-new-post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for</summary>
       
     
     
