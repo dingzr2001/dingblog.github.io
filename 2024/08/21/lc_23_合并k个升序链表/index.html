@@ -16,23 +16,23 @@
   <meta name="author" content="dingzr2001">
   <meta name="keywords" content="">
   
-    <meta name="description" content="MySQL一些底层的东西 开这个文章的初衷是在研究MySQL的一些底层原理时，感觉网上的博客写得太过抽象，虽然我语文也没那么好，但是相信还是比他们略好一点的。所以这个文章打算用来记录MySQL底层的一些原理。 MySQL总体架构 MySQL官方给出的MySQL架构图是这样的。主要由5个部分组成：缓存区，解析器，预处理器，  Innodb存储引擎">
+    <meta name="description" content="[LeetCode hot 100] 23. 合并k个升序链表 题目链接 如果是合并两个链表那没得说，两个指针分别指向两个链表，每次把小的那个后移。 但是这里是k个，如果用k个指针，每次移动最小的，那么每次都需要遍历一遍找到最小的那个，时间复杂度太高了。 从k个里面找最小，这个情景很适合使用【堆】这种结构。关于堆的知识点传送门 这里使用小根堆，因为每次要获得最小的，那么小根堆取堆顶就能很轻松地完成">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DZRHome">
-<meta property="og:url" content="http://example.com/2024/08/08/MySQL%E4%B8%80%E4%BA%9B%E5%BA%95%E5%B1%82%E7%9A%84%E4%B8%9C%E8%A5%BF/index.html">
+<meta property="og:title" content="&lt;数据结构&#x2F;算法&gt; leetcode hot100系列. 23. 合并k个升序链表">
+<meta property="og:url" content="http://example.com/2024/08/21/lc_23_%E5%90%88%E5%B9%B6k%E4%B8%AA%E5%8D%87%E5%BA%8F%E9%93%BE%E8%A1%A8/index.html">
 <meta property="og:site_name" content="DZRHome">
-<meta property="og:description" content="MySQL一些底层的东西 开这个文章的初衷是在研究MySQL的一些底层原理时，感觉网上的博客写得太过抽象，虽然我语文也没那么好，但是相信还是比他们略好一点的。所以这个文章打算用来记录MySQL底层的一些原理。 MySQL总体架构 MySQL官方给出的MySQL架构图是这样的。主要由5个部分组成：缓存区，解析器，预处理器，  Innodb存储引擎">
+<meta property="og:description" content="[LeetCode hot 100] 23. 合并k个升序链表 题目链接 如果是合并两个链表那没得说，两个指针分别指向两个链表，每次把小的那个后移。 但是这里是k个，如果用k个指针，每次移动最小的，那么每次都需要遍历一遍找到最小的那个，时间复杂度太高了。 从k个里面找最小，这个情景很适合使用【堆】这种结构。关于堆的知识点传送门 这里使用小根堆，因为每次要获得最小的，那么小根堆取堆顶就能很轻松地完成">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/.com//D:%5Cdingblog%5Csource%5Cimg%5CMySQL%5Cmysql-architecture.png">
-<meta property="article:published_time" content="2024-08-07T16:24:18.832Z">
-<meta property="article:modified_time" content="2024-08-07T18:59:27.532Z">
+<meta property="og:image" content="http://example.com/img/algorithm.png">
+<meta property="article:published_time" content="2024-08-20T17:50:00.000Z">
+<meta property="article:modified_time" content="2024-08-19T19:17:37.695Z">
 <meta property="article:author" content="dingzr2001">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/.com//D:%5Cdingblog%5Csource%5Cimg%5CMySQL%5Cmysql-architecture.png">
+<meta name="twitter:image" content="http://example.com/img/algorithm.png">
   
   
   
-  <title>DZRHome</title>
+  <title>&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表 - DZRHome</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表"></span>
           
         </div>
 
@@ -211,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-08-08 00:24" pubdate>
-          August 8, 2024 am
+        <time datetime="2024-08-21 01:50" pubdate>
+          August 21, 2024 am
         </time>
       </span>
     
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          168 words
+          1.8k words
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          2 mins
+          16 mins
         
       </span>
     
@@ -282,17 +282,20 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表</h1>
             
             
               <div class="markdown-body">
                 
-                <h1>MySQL一些底层的东西</h1>
-<p>开这个文章的初衷是在研究MySQL的一些底层原理时，感觉网上的博客写得太过抽象，虽然我语文也没那么好，但是相信还是比他们略好一点的。所以这个文章打算用来记录MySQL底层的一些原理。</p>
-<h2 id="MySQL总体架构">MySQL总体架构</h2>
-<p>MySQL官方给出的MySQL架构图是这样的。主要由5个部分组成：缓存区，解析器，预处理器，</p>
-<p><img src="/.com//D:%5Cdingblog%5Csource%5Cimg%5CMySQL%5Cmysql-architecture.png" srcset="/img/loading.gif" lazyload alt></p>
-<h2 id="Innodb存储引擎">Innodb存储引擎</h2>
+                <h1>[LeetCode hot 100] 23. 合并k个升序链表</h1>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/merge-k-sorted-lists/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<p>如果是合并两个链表那没得说，两个指针分别指向两个链表，每次把小的那个后移。</p>
+<p>但是这里是k个，如果用k个指针，每次移动最小的，那么每次都需要遍历一遍找到最小的那个，时间复杂度太高了。</p>
+<p>从k个里面找最小，这个情景很适合使用【堆】这种结构。关于堆的知识点<a href="./%E6%88%91%E4%B8%80%E5%AE%9A%E8%A6%81%E5%AD%A6%E4%BC%9A%5B%E5%A0%86%5D.md">传送门</a></p>
+<p>这里使用小根堆，因为每次要获得最小的，那么小根堆取堆顶就能很轻松地完成这个工作。堆顶是一个指针，指向某个链表的遍历位置，当取了堆顶之后，需要将遍历指针向后移动一位，并且重新加入到堆中，这里就是把堆顶替换掉，然后<strong>向下调整</strong>，最为方便。</p>
+<p>下面是完整代码，其中我偷了点懒，建堆就直接用排序代替了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> * struct ListNode &#123;</span><br><span class="hljs-comment"> *     int val;</span><br><span class="hljs-comment"> *     ListNode *next;</span><br><span class="hljs-comment"> *     ListNode() : val(0), next(nullptr) &#123;&#125;</span><br><span class="hljs-comment"> *     ListNode(int x) : val(x), next(nullptr) &#123;&#125;</span><br><span class="hljs-comment"> *     ListNode(int x, ListNode *next) : val(x), next(next) &#123;&#125;</span><br><span class="hljs-comment"> * &#125;;</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">adjustDown</span><span class="hljs-params">(vector&lt;ListNode*&gt;&amp; heap)</span></span>&#123;<br>        <span class="hljs-type">int</span> parent = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span>(<span class="hljs-number">2</span> * parent + <span class="hljs-number">1</span> &lt; heap.<span class="hljs-built_in">size</span>())&#123;<br>            <span class="hljs-type">int</span> lchild = <span class="hljs-number">2</span> * parent + <span class="hljs-number">1</span>;<br>            <span class="hljs-type">int</span> minChild = lchild;<br>            <span class="hljs-keyword">if</span>(lchild + <span class="hljs-number">1</span> &lt; heap.<span class="hljs-built_in">size</span>())&#123;<br>                <span class="hljs-type">int</span> rchild = lchild + <span class="hljs-number">1</span>;<br>                minChild = heap[lchild]-&gt;val &lt; heap[rchild]-&gt;val ? lchild : rchild;<br>            &#125;<br>            <span class="hljs-keyword">if</span>(heap[parent]-&gt;val &lt; heap[minChild]-&gt;val)&#123;<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            <span class="hljs-built_in">swap</span>(heap[parent], heap[minChild]);<br>            parent = minChild;<br>        &#125;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">headPop</span><span class="hljs-params">(vector&lt;ListNode*&gt;&amp; heap)</span></span>&#123;<br>        <span class="hljs-built_in">swap</span>(heap[<span class="hljs-number">0</span>], heap[heap.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>]);<br>        heap.<span class="hljs-built_in">pop_back</span>();<br>        <span class="hljs-built_in">adjustDown</span>(heap);<br>    &#125;<br><br>    <span class="hljs-function">ListNode* <span class="hljs-title">mergeKLists</span><span class="hljs-params">(vector&lt;ListNode*&gt;&amp; lists)</span> </span>&#123;<br>        vector&lt;ListNode*&gt; heap;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span>&amp; head : lists)&#123;<br>            <span class="hljs-keyword">if</span>(head) heap.<span class="hljs-built_in">push_back</span>(head);<br>        &#125;<br>        <span class="hljs-comment">//这里用排序实现了建堆，效果是一样的</span><br>        <span class="hljs-built_in">sort</span>(heap.<span class="hljs-built_in">begin</span>(), heap.<span class="hljs-built_in">end</span>(), [](ListNode* a, ListNode* b)&#123;<span class="hljs-keyword">return</span> a-&gt;val &lt; b-&gt;val;&#125;);<br>        <span class="hljs-function">ListNode <span class="hljs-title">dummy</span><span class="hljs-params">(<span class="hljs-number">0</span>)</span></span>;<br>        ListNode* cur = &amp;dummy;<br>        <span class="hljs-keyword">while</span>(heap.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">0</span>)&#123;<br>            cur-&gt;next = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(heap[<span class="hljs-number">0</span>]-&gt;val);<br>            cur = cur-&gt;next;<br>            <span class="hljs-keyword">if</span>(heap[<span class="hljs-number">0</span>]-&gt;next == <span class="hljs-literal">nullptr</span>)&#123;<br>                <span class="hljs-built_in">headPop</span>(heap);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                heap[<span class="hljs-number">0</span>] = heap[<span class="hljs-number">0</span>]-&gt;next;<br>                <span class="hljs-built_in">adjustDown</span>(heap);<br>            &#125;<br>            cout&lt;&lt;heap.<span class="hljs-built_in">size</span>()&lt;&lt;endl;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dummy.next;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>自己独立写出来了，有点子感动。</p>
 
                 
               </div>
@@ -300,6 +303,41 @@
             <hr/>
             <div>
               <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Algorithm/" class="category-chain-item">Algorithm</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Algorithm/C/" class="category-chain-item">C++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Algorithm/C/job/" class="category-chain-item">job</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
   
   
 </div>
@@ -310,8 +348,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
-      <div>http://example.com/2024/08/08/MySQL一些底层的东西/</div>
+      <div>&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表</div>
+      <div>http://example.com/2024/08/21/lc_23_合并k个升序链表/</div>
     </div>
     <div class="license-meta">
       
@@ -323,7 +361,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>August 8, 2024</div>
+          <div>August 21, 2024</div>
         </div>
       
       
@@ -355,18 +393,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/08/21/lc_23_%E5%90%88%E5%B9%B6k%E4%B8%AA%E5%8D%87%E5%BA%8F%E9%93%BE%E8%A1%A8/" title="&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/07/29/lc_105_%E4%BB%8E%E5%89%8D%E5%BA%8F%E4%B8%8E%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97%E6%9E%84%E9%80%A0%E4%BA%8C%E5%8F%89%E6%A0%91/" title="&lt;数据结构/算法&gt; leetcode hot100系列. 105. 从前序与中序遍历序列构造二叉树">
-                        <span class="hidden-mobile">&lt;数据结构/算法&gt; leetcode hot100系列. 105. 从前序与中序遍历序列构造二叉树</span>
+                      <a href="/2024/08/08/MySQL%E4%B8%80%E4%BA%9B%E5%BA%95%E5%B1%82%E7%9A%84%E4%B8%9C%E8%A5%BF/" title="">
+                        <span class="hidden-mobile"></span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
