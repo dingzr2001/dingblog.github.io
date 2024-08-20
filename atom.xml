@@ -44,6 +44,33 @@
   </entry>
   
   <entry>
+    <title>&lt;数据结构/算法&gt; leetcode hot100系列. 42. 接雨水</title>
+    <link href="http://example.com/2024/08/21/lc_42_%E6%8E%A5%E9%9B%A8%E6%B0%B4/"/>
+    <id>http://example.com/2024/08/21/lc_42_%E6%8E%A5%E9%9B%A8%E6%B0%B4/</id>
+    <published>2024-08-20T17:50:00.000Z</published>
+    <updated>2024-08-20T18:46:54.904Z</updated>
+    
+    <content type="html"><![CDATA[<h1>[LeetCode hot 100] 42. 接雨水</h1><p><a href="https://leetcode.cn/problems/trapping-rain-water/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p><p>这个题实在是太经典了，存在感太强了，我认为也是很考验思维的一个题，关键在于要想明白“接水”到底是怎么一回事。</p><p>这个题的难点在于，大的容器里可能有小的容器，大坑套小坑，既不能漏算也不能重复算。</p><p><img src="/.com//D:%5Cdingblog%5Csource%5Cimg%5Cleetcode%5CLC_42.png" alt></p><p>这是一个坑，坑里还有小坑，还有阶梯，应该怎么算这个坑能接多少水呢？我们注意到，任何一个坑都有三个组成部分：左壁，右壁，以及中间的底。为了避免重算，我们把坑分成几层。就像上面这个图一样。我们需要记录左壁的结构，这样才能在碰到右壁时找到对应的左壁进行计算。那么左边的柱子需要全部记录下来吗？其实并不是的。观察上面这个图，当来到第四根柱子时，左边已经产生了一个小坑，这个时候就可以计算这个小坑的面积，然后后面就不需要再计算这个小坑的面积，而是从左右壁比较高的一个往上继续算。</p><p>这种结构很适合用<strong>单调栈</strong>来解决，单调栈从栈底到栈顶保持递减，这样可以保证我们栈里留得都是可能作为“壁”的柱子，像图中第3根那种柱子，在碰到第四根更高的柱子，就变成了一个“坑底”，在后续的计算中就不应再考虑，因为他既不影响后面的计算结果（因为自己这个坑已经算过了，更大的坑就要从现在这个坑壁往上算了），也不可能作为后面的坑壁。因此，单调栈维护的过程就是在识别坑，并且算完后把坑底扔掉。对于图中这个情形，过程是：</p><table><thead><tr><th>步骤</th><th>操作</th><th>栈</th><th>解释</th></tr></thead><tbody><tr><td>1</td><td>1号入栈</td><td>1</td><td></td></tr><tr><td>2</td><td>2比栈顶矮，2入栈</td><td>1,2</td><td>2可能作为子坑的壁</td></tr><tr><td>3</td><td>3比栈顶矮，3入栈</td><td>1,2,3</td><td>3也可能作为子坑的壁</td></tr><tr><td>4</td><td>4比栈顶高，出栈，同时计算4和2（新栈顶）之间的容积</td><td>1,2</td><td>对应图中青绿色面积</td></tr><tr><td>5</td><td>4比栈顶矮，4入栈</td><td>1,2,4</td><td>4可能作为坑壁</td></tr><tr><td>6</td><td>5比栈顶矮，5入栈</td><td>1,2,4,5</td><td>同上</td></tr><tr><td>7</td><td>6比栈顶高，出栈，同时计算6和2（新栈顶）之间的容积</td><td>1,2,4</td><td></td></tr><tr><td>8</td><td>6比栈顶矮，入栈</td><td>1,2,4,6</td><td></td></tr><tr><td>9</td><td>7比栈顶高，出栈，同时计算7和4（新栈顶）之间的容积</td><td>1,2,4</td><td>对应图中浅紫色面积</td></tr><tr><td>10</td><td>7比栈顶高，出栈，同时计算7和2（新栈顶）之间的容积</td><td>1,2</td><td>对应紫色面积</td></tr><tr><td>11</td><td>7比栈顶高，出栈，同时计算7和1（新栈顶）之间的容积</td><td>1</td><td>对应深蓝色面积</td></tr><tr><td>12</td><td>7比栈顶矮，7入栈</td><td>1,7</td><td></td></tr><tr><td>13</td><td>遍历结束</td><td></td><td></td></tr></tbody></table><p>结合图来看就可以理解了，其实这个问题想成<strong>填水泥</strong>更好，小坑里面填完了水泥，大坑再填就不用填小坑了，从小坑上面接着填就行，就是这个道理。</p><p>完整代码如下：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">trap</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; height)</span> </span>&#123;<br>        stack&lt;<span class="hljs-type">int</span>&gt; st;<br>        <span class="hljs-type">int</span> ans = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; height.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            <span class="hljs-keyword">while</span>(!st.<span class="hljs-built_in">empty</span>() &amp;&amp; height[i] &gt; height[st.<span class="hljs-built_in">top</span>()])&#123;<br>                <span class="hljs-type">int</span> bottom = st.<span class="hljs-built_in">top</span>();<br>                st.<span class="hljs-built_in">pop</span>();<br>                <span class="hljs-keyword">if</span>(st.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">break</span>;<br>                <span class="hljs-type">int</span> left = st.<span class="hljs-built_in">top</span>();<br>                ans += (i - left - <span class="hljs-number">1</span>) * (<span class="hljs-built_in">min</span>(height[left], height[i]) - height[bottom]);<br>            &#125;<br>            st.<span class="hljs-built_in">push</span>(i);<br>        &#125;<br>        <span class="hljs-keyword">return</span> ans;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;[LeetCode hot 100] 42. 接雨水&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://leetcode.cn/problems/trapping-rain-water/description/?envType=study-plan-v2&amp;amp;envI</summary>
+      
+    
+    
+    
+    <category term="Algorithm" scheme="http://example.com/categories/Algorithm/"/>
+    
+    <category term="C++" scheme="http://example.com/categories/Algorithm/C/"/>
+    
+    <category term="job" scheme="http://example.com/categories/Algorithm/C/job/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title></title>
     <link href="http://example.com/2024/08/08/MySQL%E4%B8%80%E4%BA%9B%E5%BA%95%E5%B1%82%E7%9A%84%E4%B8%9C%E8%A5%BF/"/>
     <id>http://example.com/2024/08/08/MySQL%E4%B8%80%E4%BA%9B%E5%BA%95%E5%B1%82%E7%9A%84%E4%B8%9C%E8%A5%BF/</id>
@@ -553,38 +580,6 @@
     <summary type="html">&lt;h1&gt;归并排序Merge Sort&lt;/h1&gt;
 &lt;p&gt;归并排序个人感觉理解起来没什么难度，主要就是一个递归地合并子序列的过程，直接写代码，在代码特殊的地方说明一下&lt;/p&gt;
 &lt;figure class=&quot;highlight c++&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gu</summary>
-      
-    
-    
-    
-    <category term="Algorithm" scheme="http://example.com/categories/Algorithm/"/>
-    
-    <category term="C++" scheme="http://example.com/categories/Algorithm/C/"/>
-    
-    <category term="job" scheme="http://example.com/categories/Algorithm/C/job/"/>
-    
-    
-    <category term="algorithm" scheme="http://example.com/tags/algorithm/"/>
-    
-    <category term="sort" scheme="http://example.com/tags/sort/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>&lt;数据结构/算法&gt; 1.快速排序Quick Sort</title>
-    <link href="http://example.com/2024/06/12/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8FQuick%20Sort/"/>
-    <id>http://example.com/2024/06/12/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8FQuick%20Sort/</id>
-    <published>2024-06-11T23:46:00.000Z</published>
-    <updated>2024-06-10T16:32:04.260Z</updated>
-    
-    <content type="html"><![CDATA[<h1>快速排序Quick Sort</h1><p>事实上对于快速排序一直以来都是懵懵的，苦想后终于茅塞顿开。</p><p>首先，快速排序是一个递归的算法，核心思想是在一个序列中选择一个分界值（Pivot），将该序列中的元素划分为左右两部分，左边的元素均小于分界值，右边的元素大于分界值。然后对左右两边分别递归地执行此操作。</p><p>那么怎样执行这个“分成左右两边”的操作呢？目前最简洁的方法是这样的。</p><ul><li>设立一个快指针fast，一个慢指针slow。快指针用于循环，慢指针用于指向一个位置。</li><li>指向的位置是什么呢？就是下一次遇到比pivot值小的元素时，应该把它填在哪里。</li><li>那么这个位置怎么确定呢，很简单，从序列最左边开始，每找到一个比pivot值小的元素就放到左边，然后往右挪一下就行了。对应到slow指针也就是每次往slow指针位置放，然后slow++。</li><li>那么原来位置上的元素怎么办呢？直接和当前这个快指针指向的元素，也就是那个比pivot值小的元素，互换位置就好了。</li><li>这样做，遍历一遍后，比pivot小的值都往左边不断地堆放，最后全在左边了。剩下的比pivot大的值自然就跑到右边去了。</li><li>但是还有一个pivot值没有处理，这个值往往是选择序列最左边或者最右边的元素，我们在刚刚的遍历中直接略过。也就是如果选了最左边的元素，一开始遍历就直接从第二个元素开始了。如果是最右边的元素，遍历的时候就到倒数第二个元素停止。</li><li>最后剩下的slow元素，很明显是要放到中间的。注意到这个时候slow指针正好就在中间，交换位置即可。这里有两种情况：<ul><li>一种是每次交换后slow再++，也就是下一次放就是直接放到slow的位置。这种情况下遍历结束后的slow应该是指向第一个比pivot大的元素，也就是右边序列的最左端。如果pivot是左端点则需要和slow-1位置互换，这样把slow-1也就是最后一个比pivot小的值换到最前面，如果pivot是右端点则直接和slow互换，这样把第一个比pivot大的值换到最后面。</li><li>第二种是先slow++再交换，这样每一次交换前需要先把slow++挪到下一个位置。这种情况下遍历结束后的slow就是最后一个比pivot小的元素。对于两种pivot位置和第一种情况同理。</li></ul></li></ul><p>以下是C++代码：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">partition</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;arr, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-type">int</span> pivot = arr[right];<br>    <span class="hljs-type">int</span> slow = left;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> fast = left; fast &lt; right; fast++)&#123;<br>        <span class="hljs-keyword">if</span>(arr[fast] &lt; pivot)&#123;<br>            <span class="hljs-type">int</span> tmp = arr[slow];<br>            arr[slow] = arr[fast];<br>            arr[fast] = tmp;<br>            slow++;<br>        &#125;<br>    &#125;<br>    arr[right] = arr[slow];<br>    arr[slow] = pivot;<br>    <span class="hljs-keyword">return</span> slow;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">quickSort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt; &amp;arr, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-type">int</span> p = <span class="hljs-built_in">partition</span>(arr, left, right);<br>    <span class="hljs-built_in">quickSort</span>(arr, left, p<span class="hljs-number">-1</span>);<br>    <span class="hljs-built_in">quickSort</span>(arr, p+<span class="hljs-number">1</span>, right);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>  vector&lt;<span class="hljs-type">int</span>&gt; arr = &#123;<span class="hljs-number">7</span>, <span class="hljs-number">9</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>&#125;;<br>  <span class="hljs-built_in">quickSort</span>(arr, <span class="hljs-number">0</span>, arr.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>);<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; arr.<span class="hljs-built_in">size</span>(); i++)&#123;<br>    cout &lt;&lt; arr[i] &lt;&lt; <span class="hljs-string">&quot;,&quot;</span>;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure><p>其实就是这么简单的道理，不知道自己以前为什么那么久没搞明白，还是太菜了。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;快速排序Quick Sort&lt;/h1&gt;
-&lt;p&gt;事实上对于快速排序一直以来都是懵懵的，苦想后终于茅塞顿开。&lt;/p&gt;
-&lt;p&gt;首先，快速排序是一个递归的算法，核心思想是在一个序列中选择一个分界值（Pivot），将该序列中的元素划分为左右两部分，左边的元素均小于分界值，右边的元素</summary>
       
     
     

@@ -16,23 +16,23 @@
   <meta name="author" content="dingzr2001">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[LeetCode hot 100] 23. 合并k个升序链表 题目链接 如果是合并两个链表那没得说，两个指针分别指向两个链表，每次把小的那个后移。 但是这里是k个，如果用k个指针，每次移动最小的，那么每次都需要遍历一遍找到最小的那个，时间复杂度太高了。 从k个里面找最小，这个情景很适合使用【堆】这种结构。关于堆的知识点传送门 这里使用小根堆，因为每次要获得最小的，那么小根堆取堆顶就能很轻松地完成">
+    <meta name="description" content="[LeetCode hot 100] 42. 接雨水 题目链接 这个题实在是太经典了，存在感太强了，我认为也是很考验思维的一个题，关键在于要想明白“接水”到底是怎么一回事。 这个题的难点在于，大的容器里可能有小的容器，大坑套小坑，既不能漏算也不能重复算。  这是一个坑，坑里还有小坑，还有阶梯，应该怎么算这个坑能接多少水呢？我们注意到，任何一个坑都有三个组成部分：左壁，右壁，以及中间的底。为了避免重">
 <meta property="og:type" content="article">
-<meta property="og:title" content="&lt;数据结构&#x2F;算法&gt; leetcode hot100系列. 23. 合并k个升序链表">
-<meta property="og:url" content="http://example.com/2024/08/21/lc_23_%E5%90%88%E5%B9%B6k%E4%B8%AA%E5%8D%87%E5%BA%8F%E9%93%BE%E8%A1%A8/index.html">
+<meta property="og:title" content="&lt;数据结构&#x2F;算法&gt; leetcode hot100系列. 42. 接雨水">
+<meta property="og:url" content="http://example.com/2024/08/21/lc_42_%E6%8E%A5%E9%9B%A8%E6%B0%B4/index.html">
 <meta property="og:site_name" content="DZRHome">
-<meta property="og:description" content="[LeetCode hot 100] 23. 合并k个升序链表 题目链接 如果是合并两个链表那没得说，两个指针分别指向两个链表，每次把小的那个后移。 但是这里是k个，如果用k个指针，每次移动最小的，那么每次都需要遍历一遍找到最小的那个，时间复杂度太高了。 从k个里面找最小，这个情景很适合使用【堆】这种结构。关于堆的知识点传送门 这里使用小根堆，因为每次要获得最小的，那么小根堆取堆顶就能很轻松地完成">
+<meta property="og:description" content="[LeetCode hot 100] 42. 接雨水 题目链接 这个题实在是太经典了，存在感太强了，我认为也是很考验思维的一个题，关键在于要想明白“接水”到底是怎么一回事。 这个题的难点在于，大的容器里可能有小的容器，大坑套小坑，既不能漏算也不能重复算。  这是一个坑，坑里还有小坑，还有阶梯，应该怎么算这个坑能接多少水呢？我们注意到，任何一个坑都有三个组成部分：左壁，右壁，以及中间的底。为了避免重">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/img/algorithm.png">
 <meta property="article:published_time" content="2024-08-20T17:50:00.000Z">
-<meta property="article:modified_time" content="2024-08-19T19:17:37.695Z">
+<meta property="article:modified_time" content="2024-08-20T18:46:54.904Z">
 <meta property="article:author" content="dingzr2001">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://example.com/img/algorithm.png">
   
   
   
-  <title>&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表 - DZRHome</title>
+  <title>&lt;数据结构/算法&gt; leetcode hot100系列. 42. 接雨水 - DZRHome</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表"></span>
+            <span id="subtitle" data-typed-text="&lt;数据结构/算法&gt; leetcode hot100系列. 42. 接雨水"></span>
           
         </div>
 
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.8k words
+          1.4k words
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          16 mins
+          12 mins
         
       </span>
     
@@ -282,20 +282,111 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表</h1>
+            <h1 style="display: none">&lt;数据结构/算法&gt; leetcode hot100系列. 42. 接雨水</h1>
             
             
               <div class="markdown-body">
                 
-                <h1>[LeetCode hot 100] 23. 合并k个升序链表</h1>
-<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/merge-k-sorted-lists/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
-<p>如果是合并两个链表那没得说，两个指针分别指向两个链表，每次把小的那个后移。</p>
-<p>但是这里是k个，如果用k个指针，每次移动最小的，那么每次都需要遍历一遍找到最小的那个，时间复杂度太高了。</p>
-<p>从k个里面找最小，这个情景很适合使用【堆】这种结构。关于堆的知识点<a href="./%E6%88%91%E4%B8%80%E5%AE%9A%E8%A6%81%E5%AD%A6%E4%BC%9A%5B%E5%A0%86%5D.md">传送门</a></p>
-<p>这里使用小根堆，因为每次要获得最小的，那么小根堆取堆顶就能很轻松地完成这个工作。堆顶是一个指针，指向某个链表的遍历位置，当取了堆顶之后，需要将遍历指针向后移动一位，并且重新加入到堆中，这里就是把堆顶替换掉，然后<strong>向下调整</strong>，最为方便。</p>
-<p>下面是完整代码，其中我偷了点懒，建堆就直接用排序代替了。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> * struct ListNode &#123;</span><br><span class="hljs-comment"> *     int val;</span><br><span class="hljs-comment"> *     ListNode *next;</span><br><span class="hljs-comment"> *     ListNode() : val(0), next(nullptr) &#123;&#125;</span><br><span class="hljs-comment"> *     ListNode(int x) : val(x), next(nullptr) &#123;&#125;</span><br><span class="hljs-comment"> *     ListNode(int x, ListNode *next) : val(x), next(next) &#123;&#125;</span><br><span class="hljs-comment"> * &#125;;</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">adjustDown</span><span class="hljs-params">(vector&lt;ListNode*&gt;&amp; heap)</span></span>&#123;<br>        <span class="hljs-type">int</span> parent = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span>(<span class="hljs-number">2</span> * parent + <span class="hljs-number">1</span> &lt; heap.<span class="hljs-built_in">size</span>())&#123;<br>            <span class="hljs-type">int</span> lchild = <span class="hljs-number">2</span> * parent + <span class="hljs-number">1</span>;<br>            <span class="hljs-type">int</span> minChild = lchild;<br>            <span class="hljs-keyword">if</span>(lchild + <span class="hljs-number">1</span> &lt; heap.<span class="hljs-built_in">size</span>())&#123;<br>                <span class="hljs-type">int</span> rchild = lchild + <span class="hljs-number">1</span>;<br>                minChild = heap[lchild]-&gt;val &lt; heap[rchild]-&gt;val ? lchild : rchild;<br>            &#125;<br>            <span class="hljs-keyword">if</span>(heap[parent]-&gt;val &lt; heap[minChild]-&gt;val)&#123;<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            <span class="hljs-built_in">swap</span>(heap[parent], heap[minChild]);<br>            parent = minChild;<br>        &#125;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">headPop</span><span class="hljs-params">(vector&lt;ListNode*&gt;&amp; heap)</span></span>&#123;<br>        <span class="hljs-built_in">swap</span>(heap[<span class="hljs-number">0</span>], heap[heap.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>]);<br>        heap.<span class="hljs-built_in">pop_back</span>();<br>        <span class="hljs-built_in">adjustDown</span>(heap);<br>    &#125;<br><br>    <span class="hljs-function">ListNode* <span class="hljs-title">mergeKLists</span><span class="hljs-params">(vector&lt;ListNode*&gt;&amp; lists)</span> </span>&#123;<br>        vector&lt;ListNode*&gt; heap;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span>&amp; head : lists)&#123;<br>            <span class="hljs-keyword">if</span>(head) heap.<span class="hljs-built_in">push_back</span>(head);<br>        &#125;<br>        <span class="hljs-comment">//这里用排序实现了建堆，效果是一样的</span><br>        <span class="hljs-built_in">sort</span>(heap.<span class="hljs-built_in">begin</span>(), heap.<span class="hljs-built_in">end</span>(), [](ListNode* a, ListNode* b)&#123;<span class="hljs-keyword">return</span> a-&gt;val &lt; b-&gt;val;&#125;);<br>        <span class="hljs-function">ListNode <span class="hljs-title">dummy</span><span class="hljs-params">(<span class="hljs-number">0</span>)</span></span>;<br>        ListNode* cur = &amp;dummy;<br>        <span class="hljs-keyword">while</span>(heap.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">0</span>)&#123;<br>            cur-&gt;next = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(heap[<span class="hljs-number">0</span>]-&gt;val);<br>            cur = cur-&gt;next;<br>            <span class="hljs-keyword">if</span>(heap[<span class="hljs-number">0</span>]-&gt;next == <span class="hljs-literal">nullptr</span>)&#123;<br>                <span class="hljs-built_in">headPop</span>(heap);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                heap[<span class="hljs-number">0</span>] = heap[<span class="hljs-number">0</span>]-&gt;next;<br>                <span class="hljs-built_in">adjustDown</span>(heap);<br>            &#125;<br>            cout&lt;&lt;heap.<span class="hljs-built_in">size</span>()&lt;&lt;endl;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dummy.next;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-<p>自己独立写出来了，有点子感动。</p>
+                <h1>[LeetCode hot 100] 42. 接雨水</h1>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/trapping-rain-water/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<p>这个题实在是太经典了，存在感太强了，我认为也是很考验思维的一个题，关键在于要想明白“接水”到底是怎么一回事。</p>
+<p>这个题的难点在于，大的容器里可能有小的容器，大坑套小坑，既不能漏算也不能重复算。</p>
+<p><img src="/.com//D:%5Cdingblog%5Csource%5Cimg%5Cleetcode%5CLC_42.png" srcset="/img/loading.gif" lazyload alt></p>
+<p>这是一个坑，坑里还有小坑，还有阶梯，应该怎么算这个坑能接多少水呢？我们注意到，任何一个坑都有三个组成部分：左壁，右壁，以及中间的底。为了避免重算，我们把坑分成几层。就像上面这个图一样。我们需要记录左壁的结构，这样才能在碰到右壁时找到对应的左壁进行计算。那么左边的柱子需要全部记录下来吗？其实并不是的。观察上面这个图，当来到第四根柱子时，左边已经产生了一个小坑，这个时候就可以计算这个小坑的面积，然后后面就不需要再计算这个小坑的面积，而是从左右壁比较高的一个往上继续算。</p>
+<p>这种结构很适合用<strong>单调栈</strong>来解决，单调栈从栈底到栈顶保持递减，这样可以保证我们栈里留得都是可能作为“壁”的柱子，像图中第3根那种柱子，在碰到第四根更高的柱子，就变成了一个“坑底”，在后续的计算中就不应再考虑，因为他既不影响后面的计算结果（因为自己这个坑已经算过了，更大的坑就要从现在这个坑壁往上算了），也不可能作为后面的坑壁。因此，单调栈维护的过程就是在识别坑，并且算完后把坑底扔掉。对于图中这个情形，过程是：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作</th>
+<th>栈</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1号入栈</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>2比栈顶矮，2入栈</td>
+<td>1,2</td>
+<td>2可能作为子坑的壁</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3比栈顶矮，3入栈</td>
+<td>1,2,3</td>
+<td>3也可能作为子坑的壁</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4比栈顶高，出栈，同时计算4和2（新栈顶）之间的容积</td>
+<td>1,2</td>
+<td>对应图中青绿色面积</td>
+</tr>
+<tr>
+<td>5</td>
+<td>4比栈顶矮，4入栈</td>
+<td>1,2,4</td>
+<td>4可能作为坑壁</td>
+</tr>
+<tr>
+<td>6</td>
+<td>5比栈顶矮，5入栈</td>
+<td>1,2,4,5</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>7</td>
+<td>6比栈顶高，出栈，同时计算6和2（新栈顶）之间的容积</td>
+<td>1,2,4</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>6比栈顶矮，入栈</td>
+<td>1,2,4,6</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>7比栈顶高，出栈，同时计算7和4（新栈顶）之间的容积</td>
+<td>1,2,4</td>
+<td>对应图中浅紫色面积</td>
+</tr>
+<tr>
+<td>10</td>
+<td>7比栈顶高，出栈，同时计算7和2（新栈顶）之间的容积</td>
+<td>1,2</td>
+<td>对应紫色面积</td>
+</tr>
+<tr>
+<td>11</td>
+<td>7比栈顶高，出栈，同时计算7和1（新栈顶）之间的容积</td>
+<td>1</td>
+<td>对应深蓝色面积</td>
+</tr>
+<tr>
+<td>12</td>
+<td>7比栈顶矮，7入栈</td>
+<td>1,7</td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
+<td>遍历结束</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>结合图来看就可以理解了，其实这个问题想成<strong>填水泥</strong>更好，小坑里面填完了水泥，大坑再填就不用填小坑了，从小坑上面接着填就行，就是这个道理。</p>
+<p>完整代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">trap</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; height)</span> </span>&#123;<br>        stack&lt;<span class="hljs-type">int</span>&gt; st;<br>        <span class="hljs-type">int</span> ans = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; height.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            <span class="hljs-keyword">while</span>(!st.<span class="hljs-built_in">empty</span>() &amp;&amp; height[i] &gt; height[st.<span class="hljs-built_in">top</span>()])&#123;<br>                <span class="hljs-type">int</span> bottom = st.<span class="hljs-built_in">top</span>();<br>                st.<span class="hljs-built_in">pop</span>();<br>                <span class="hljs-keyword">if</span>(st.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">break</span>;<br>                <span class="hljs-type">int</span> left = st.<span class="hljs-built_in">top</span>();<br>                ans += (i - left - <span class="hljs-number">1</span>) * (<span class="hljs-built_in">min</span>(height[left], height[i]) - height[bottom]);<br>            &#125;<br>            st.<span class="hljs-built_in">push</span>(i);<br>        &#125;<br>        <span class="hljs-keyword">return</span> ans;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -348,8 +439,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表</div>
-      <div>http://example.com/2024/08/21/lc_23_合并k个升序链表/</div>
+      <div>&lt;数据结构/算法&gt; leetcode hot100系列. 42. 接雨水</div>
+      <div>http://example.com/2024/08/21/lc_42_接雨水/</div>
     </div>
     <div class="license-meta">
       
@@ -393,12 +484,18 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2024/08/21/lc_23_%E5%90%88%E5%B9%B6k%E4%B8%AA%E5%8D%87%E5%BA%8F%E9%93%BE%E8%A1%A8/" title="&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/08/21/lc_42_%E6%8E%A5%E9%9B%A8%E6%B0%B4/" title="&lt;数据结构/算法&gt; leetcode hot100系列. 42. 接雨水">
-                        <span class="hidden-mobile">&lt;数据结构/算法&gt; leetcode hot100系列. 42. 接雨水</span>
+                      <a href="/2024/08/08/MySQL%E4%B8%80%E4%BA%9B%E5%BA%95%E5%B1%82%E7%9A%84%E4%B8%9C%E8%A5%BF/" title="">
+                        <span class="hidden-mobile"></span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

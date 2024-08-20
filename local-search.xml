@@ -27,6 +27,29 @@
   
   
   <entry>
+    <title>&lt;数据结构/算法&gt; leetcode hot100系列. 42. 接雨水</title>
+    <link href="/2024/08/21/lc_42_%E6%8E%A5%E9%9B%A8%E6%B0%B4/"/>
+    <url>/2024/08/21/lc_42_%E6%8E%A5%E9%9B%A8%E6%B0%B4/</url>
+    
+    <content type="html"><![CDATA[<h1>[LeetCode hot 100] 42. 接雨水</h1><p><a href="https://leetcode.cn/problems/trapping-rain-water/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p><p>这个题实在是太经典了，存在感太强了，我认为也是很考验思维的一个题，关键在于要想明白“接水”到底是怎么一回事。</p><p>这个题的难点在于，大的容器里可能有小的容器，大坑套小坑，既不能漏算也不能重复算。</p><p><img src="/.com//D:%5Cdingblog%5Csource%5Cimg%5Cleetcode%5CLC_42.png" alt></p><p>这是一个坑，坑里还有小坑，还有阶梯，应该怎么算这个坑能接多少水呢？我们注意到，任何一个坑都有三个组成部分：左壁，右壁，以及中间的底。为了避免重算，我们把坑分成几层。就像上面这个图一样。我们需要记录左壁的结构，这样才能在碰到右壁时找到对应的左壁进行计算。那么左边的柱子需要全部记录下来吗？其实并不是的。观察上面这个图，当来到第四根柱子时，左边已经产生了一个小坑，这个时候就可以计算这个小坑的面积，然后后面就不需要再计算这个小坑的面积，而是从左右壁比较高的一个往上继续算。</p><p>这种结构很适合用<strong>单调栈</strong>来解决，单调栈从栈底到栈顶保持递减，这样可以保证我们栈里留得都是可能作为“壁”的柱子，像图中第3根那种柱子，在碰到第四根更高的柱子，就变成了一个“坑底”，在后续的计算中就不应再考虑，因为他既不影响后面的计算结果（因为自己这个坑已经算过了，更大的坑就要从现在这个坑壁往上算了），也不可能作为后面的坑壁。因此，单调栈维护的过程就是在识别坑，并且算完后把坑底扔掉。对于图中这个情形，过程是：</p><table><thead><tr><th>步骤</th><th>操作</th><th>栈</th><th>解释</th></tr></thead><tbody><tr><td>1</td><td>1号入栈</td><td>1</td><td></td></tr><tr><td>2</td><td>2比栈顶矮，2入栈</td><td>1,2</td><td>2可能作为子坑的壁</td></tr><tr><td>3</td><td>3比栈顶矮，3入栈</td><td>1,2,3</td><td>3也可能作为子坑的壁</td></tr><tr><td>4</td><td>4比栈顶高，出栈，同时计算4和2（新栈顶）之间的容积</td><td>1,2</td><td>对应图中青绿色面积</td></tr><tr><td>5</td><td>4比栈顶矮，4入栈</td><td>1,2,4</td><td>4可能作为坑壁</td></tr><tr><td>6</td><td>5比栈顶矮，5入栈</td><td>1,2,4,5</td><td>同上</td></tr><tr><td>7</td><td>6比栈顶高，出栈，同时计算6和2（新栈顶）之间的容积</td><td>1,2,4</td><td></td></tr><tr><td>8</td><td>6比栈顶矮，入栈</td><td>1,2,4,6</td><td></td></tr><tr><td>9</td><td>7比栈顶高，出栈，同时计算7和4（新栈顶）之间的容积</td><td>1,2,4</td><td>对应图中浅紫色面积</td></tr><tr><td>10</td><td>7比栈顶高，出栈，同时计算7和2（新栈顶）之间的容积</td><td>1,2</td><td>对应紫色面积</td></tr><tr><td>11</td><td>7比栈顶高，出栈，同时计算7和1（新栈顶）之间的容积</td><td>1</td><td>对应深蓝色面积</td></tr><tr><td>12</td><td>7比栈顶矮，7入栈</td><td>1,7</td><td></td></tr><tr><td>13</td><td>遍历结束</td><td></td><td></td></tr></tbody></table><p>结合图来看就可以理解了，其实这个问题想成<strong>填水泥</strong>更好，小坑里面填完了水泥，大坑再填就不用填小坑了，从小坑上面接着填就行，就是这个道理。</p><p>完整代码如下：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">trap</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; height)</span> </span>&#123;<br>        stack&lt;<span class="hljs-type">int</span>&gt; st;<br>        <span class="hljs-type">int</span> ans = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; height.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            <span class="hljs-keyword">while</span>(!st.<span class="hljs-built_in">empty</span>() &amp;&amp; height[i] &gt; height[st.<span class="hljs-built_in">top</span>()])&#123;<br>                <span class="hljs-type">int</span> bottom = st.<span class="hljs-built_in">top</span>();<br>                st.<span class="hljs-built_in">pop</span>();<br>                <span class="hljs-keyword">if</span>(st.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">break</span>;<br>                <span class="hljs-type">int</span> left = st.<span class="hljs-built_in">top</span>();<br>                ans += (i - left - <span class="hljs-number">1</span>) * (<span class="hljs-built_in">min</span>(height[left], height[i]) - height[bottom]);<br>            &#125;<br>            st.<span class="hljs-built_in">push</span>(i);<br>        &#125;<br>        <span class="hljs-keyword">return</span> ans;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Algorithm</category>
+      
+      <category>C++</category>
+      
+      <category>job</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title></title>
     <link href="/2024/08/08/MySQL%E4%B8%80%E4%BA%9B%E5%BA%95%E5%B1%82%E7%9A%84%E4%B8%9C%E8%A5%BF/"/>
     <url>/2024/08/08/MySQL%E4%B8%80%E4%BA%9B%E5%BA%95%E5%B1%82%E7%9A%84%E4%B8%9C%E8%A5%BF/</url>
