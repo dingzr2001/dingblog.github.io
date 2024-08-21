@@ -16,25 +16,23 @@
   <meta name="author" content="dingzr2001">
   <meta name="keywords" content="">
   
-    <meta name="description" content="[LeetCode hot 100] 695. 岛屿的最大面积 题目链接 我看这还是一个常考的题目。这种题适合用dfs，从每一个点向四周深度优先搜索，用一个visited数组保存每个点是否被访问过，如果访问过就不要重复计算了。如果访问到0，或者到界外了，就返回0，否则就是上下左右的面积之和再+1（自己本身还占一格）。遇到访问过的也是直接返回0，表示要么在这一次计算中重复访问了，要么就是之前在从别的">
+    <meta name="description" content="[LeetCode hot 100] 141(142). 环形链表 题目链接 环形链表的判断在要求空间复杂度为O(1)时，需要使用Floyd判圈法来判断是否存在环。Floyd判圈法的具体讲解看这里。 具体步骤为：  快指针fast和慢指针slow指向链表头（首元结点） fast每次移动两步，slow每次移动一步 如果遇到null说明没有环，如果fast和slow相遇说明有环，进入4 其中一个指针移">
 <meta property="og:type" content="article">
-<meta property="og:title" content="&lt;数据结构&#x2F;算法&gt; leetcode hot100系列. 695.最大岛屿面积">
-<meta property="og:url" content="http://example.com/2024/06/16/lc_695_%E6%9C%80%E5%A4%A7%E5%B2%9B%E5%B1%BF%E9%9D%A2%E7%A7%AF/index.html">
+<meta property="og:title" content="&lt;数据结构&#x2F;算法&gt; leetcode hot100系列. 141(142). 环形链表">
+<meta property="og:url" content="http://example.com/2024/08/21/lc_141_%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/index.html">
 <meta property="og:site_name" content="DZRHome">
-<meta property="og:description" content="[LeetCode hot 100] 695. 岛屿的最大面积 题目链接 我看这还是一个常考的题目。这种题适合用dfs，从每一个点向四周深度优先搜索，用一个visited数组保存每个点是否被访问过，如果访问过就不要重复计算了。如果访问到0，或者到界外了，就返回0，否则就是上下左右的面积之和再+1（自己本身还占一格）。遇到访问过的也是直接返回0，表示要么在这一次计算中重复访问了，要么就是之前在从别的">
+<meta property="og:description" content="[LeetCode hot 100] 141(142). 环形链表 题目链接 环形链表的判断在要求空间复杂度为O(1)时，需要使用Floyd判圈法来判断是否存在环。Floyd判圈法的具体讲解看这里。 具体步骤为：  快指针fast和慢指针slow指向链表头（首元结点） fast每次移动两步，slow每次移动一步 如果遇到null说明没有环，如果fast和slow相遇说明有环，进入4 其中一个指针移">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/img/algorithm.png">
-<meta property="article:published_time" content="2024-06-15T17:50:00.000Z">
-<meta property="article:modified_time" content="2024-08-11T07:11:39.947Z">
+<meta property="article:published_time" content="2024-08-20T17:50:00.000Z">
+<meta property="article:modified_time" content="2024-08-21T18:28:56.736Z">
 <meta property="article:author" content="dingzr2001">
-<meta property="article:tag" content="algorithm">
-<meta property="article:tag" content="backtrack">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://example.com/img/algorithm.png">
   
   
   
-  <title>&lt;数据结构/算法&gt; leetcode hot100系列. 695.最大岛屿面积 - DZRHome</title>
+  <title>&lt;数据结构/算法&gt; leetcode hot100系列. 141(142). 环形链表 - DZRHome</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -202,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="&lt;数据结构/算法&gt; leetcode hot100系列. 695.最大岛屿面积"></span>
+            <span id="subtitle" data-typed-text="&lt;数据结构/算法&gt; leetcode hot100系列. 141(142). 环形链表"></span>
           
         </div>
 
@@ -213,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-06-16 01:50" pubdate>
-          June 16, 2024 am
+        <time datetime="2024-08-21 01:50" pubdate>
+          August 21, 2024 am
         </time>
       </span>
     
@@ -225,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k words
+          779 words
         
       </span>
     
@@ -236,7 +234,7 @@
         
         
         
-          10 mins
+          7 mins
         
       </span>
     
@@ -284,16 +282,24 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">&lt;数据结构/算法&gt; leetcode hot100系列. 695.最大岛屿面积</h1>
+            <h1 style="display: none">&lt;数据结构/算法&gt; leetcode hot100系列. 141(142). 环形链表</h1>
             
             
               <div class="markdown-body">
                 
-                <h1>[LeetCode hot 100] 695. 岛屿的最大面积</h1>
-<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/max-area-of-island/description/">题目链接</a></p>
-<p>我看这还是一个常考的题目。这种题适合用dfs，从每一个点向四周深度优先搜索，用一个visited数组保存每个点是否被访问过，如果访问过就不要重复计算了。如果访问到0，或者到界外了，就返回0，否则就是上下左右的面积之和再+1（自己本身还占一格）。遇到访问过的也是直接返回0，表示要么在这一次计算中重复访问了，要么就是之前在从别的点开始计算时已经计算过了。</p>
+                <h1>[LeetCode hot 100] 141(142). 环形链表</h1>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/linked-list-cycle/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<p>环形链表的判断在要求空间复杂度为O(1)时，需要使用Floyd判圈法来判断是否存在环。Floyd判圈法的具体讲解<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_61350148/article/details/139557492">看这里</a>。</p>
+<p>具体步骤为：</p>
+<ol>
+<li>快指针fast和慢指针slow指向链表头（首元结点）</li>
+<li>fast每次移动两步，slow每次移动一步</li>
+<li>如果遇到null说明没有环，如果fast和slow相遇说明有环，进入4</li>
+<li>其中一个指针移回链表头，另一个不动</li>
+<li>两个指针每次移动一步，直到相遇，就是环的入口</li>
+</ol>
 <p>完整代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dfs</span><span class="hljs-params">(vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt;&amp; grid, <span class="hljs-type">int</span> idx1, <span class="hljs-type">int</span> idx2, vector&lt;vector&lt;<span class="hljs-type">bool</span>&gt;&gt;&amp; visited)</span></span>&#123;<br>        <span class="hljs-keyword">if</span>(idx1 &lt; <span class="hljs-number">0</span> || idx1 &gt;= grid.<span class="hljs-built_in">size</span>() || idx2 &lt; <span class="hljs-number">0</span> || idx2 &gt;= grid[<span class="hljs-number">0</span>].<span class="hljs-built_in">size</span>())&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(visited[idx1][idx2] || grid[idx1][idx2] == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-comment">// cout&lt;&lt;idx1&lt;&lt;&quot;,&quot;&lt;&lt;idx2&lt;&lt;endl;</span><br>        visited[idx1][idx2] = <span class="hljs-literal">true</span>;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">dfs</span>(grid, idx1 - <span class="hljs-number">1</span>, idx2, visited) +<br>            <span class="hljs-built_in">dfs</span>(grid, idx1 + <span class="hljs-number">1</span>, idx2, visited) +<br>            <span class="hljs-built_in">dfs</span>(grid, idx1, idx2 - <span class="hljs-number">1</span>, visited) + <br>            <span class="hljs-built_in">dfs</span>(grid, idx1, idx2 + <span class="hljs-number">1</span>, visited) + <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">maxAreaOfIsland</span><span class="hljs-params">(vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;<br>        vector&lt;vector&lt;<span class="hljs-type">bool</span>&gt;&gt; visited;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; grid.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            <span class="hljs-function">vector&lt;<span class="hljs-type">bool</span>&gt; <span class="hljs-title">tmp</span><span class="hljs-params">(grid[<span class="hljs-number">0</span>].size(), <span class="hljs-literal">false</span>)</span></span>;<br>            visited.<span class="hljs-built_in">push_back</span>(tmp);<br>        &#125;<br>        <span class="hljs-type">int</span> maxArea = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; grid.<span class="hljs-built_in">size</span>(); i++)&#123;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; grid[<span class="hljs-number">0</span>].<span class="hljs-built_in">size</span>(); j++)&#123;<br>                maxArea = <span class="hljs-built_in">max</span>(maxArea, <span class="hljs-built_in">dfs</span>(grid, i, j, visited));<br>                <br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> maxArea;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> * struct ListNode &#123;</span><br><span class="hljs-comment"> *     int val;</span><br><span class="hljs-comment"> *     ListNode *next;</span><br><span class="hljs-comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span><br><span class="hljs-comment"> * &#125;;</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode *<span class="hljs-title">detectCycle</span><span class="hljs-params">(ListNode *head)</span> </span>&#123;<br>        ListNode* fast = head;<br>        ListNode* slow = head;<br>        <span class="hljs-keyword">while</span>(fast &amp;&amp; fast-&gt;next &amp;&amp; fast-&gt;next-&gt;next)&#123;<br>            fast = fast-&gt;next-&gt;next;<br>            slow = slow-&gt;next;<br>            <span class="hljs-keyword">if</span>(slow == fast)&#123;<br>                fast = head;<br>                <span class="hljs-keyword">while</span>(fast != slow)&#123;<br>                    fast = fast-&gt;next;<br>                    slow = slow-&gt;next;<br>                &#125;<br>                <span class="hljs-keyword">return</span> fast;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -338,15 +344,6 @@
     </div>
   
   
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/algorithm/">#algorithm</a>
-      
-        <a href="/tags/backtrack/">#backtrack</a>
-      
-    </div>
-  
 </div>
 
 
@@ -355,8 +352,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>&lt;数据结构/算法&gt; leetcode hot100系列. 695.最大岛屿面积</div>
-      <div>http://example.com/2024/06/16/lc_695_最大岛屿面积/</div>
+      <div>&lt;数据结构/算法&gt; leetcode hot100系列. 141(142). 环形链表</div>
+      <div>http://example.com/2024/08/21/lc_141_环形链表/</div>
     </div>
     <div class="license-meta">
       
@@ -368,7 +365,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>June 16, 2024</div>
+          <div>August 21, 2024</div>
         </div>
       
       
@@ -400,18 +397,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/06/16/lc_46_%E5%85%A8%E6%8E%92%E5%88%97/" title="&lt;数据结构/算法&gt; leetcode hot100系列. 46.全排列Permutation">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">&lt;数据结构/算法&gt; leetcode hot100系列. 46.全排列Permutation</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/06/13/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8FMergeSort/" title="&lt;数据结构/算法&gt; 2.归并排序Merge Sort">
-                        <span class="hidden-mobile">&lt;数据结构/算法&gt; 2.归并排序Merge Sort</span>
+                      <a href="/2024/08/21/lc_23_%E5%90%88%E5%B9%B6k%E4%B8%AA%E5%8D%87%E5%BA%8F%E9%93%BE%E8%A1%A8/" title="&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表">
+                        <span class="hidden-mobile">&lt;数据结构/算法&gt; leetcode hot100系列. 23. 合并k个升序链表</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

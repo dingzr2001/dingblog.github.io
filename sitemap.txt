@@ -1,3 +1,6 @@
+http://example.com/2024/06/16/lc_46_%E5%85%A8%E6%8E%92%E5%88%97/
+http://example.com/2024/08/21/lc_48_%E6%97%8B%E8%BD%AC%E5%9B%BE%E5%83%8F/
+http://example.com/2024/08/21/lc_141_%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/
 http://example.com/2024/08/21/lc_42_%E6%8E%A5%E9%9B%A8%E6%B0%B4/
 http://example.com/2024/08/21/lc_23_%E5%90%88%E5%B9%B6k%E4%B8%AA%E5%8D%87%E5%BA%8F%E9%93%BE%E8%A1%A8/
 http://example.com/2024/06/16/Knapsack%20Problems/
@@ -41,10 +44,10 @@ http://example.com/tags/greenplum/
 http://example.com/tags/postgresql/
 http://example.com/tags/python37/
 http://example.com/tags/ubuntu/
-http://example.com/tags/vector-database/
-http://example.com/tags/cpu-gpu-co-design/
 http://example.com/tags/algorithm/
 http://example.com/tags/dp/
+http://example.com/tags/vector-database/
+http://example.com/tags/cpu-gpu-co-design/
 http://example.com/tags/python/
 http://example.com/tags/variable/
 http://example.com/tags/copy/
@@ -56,8 +59,8 @@ http://example.com/tags/predict/
 http://example.com/tags/distribution-shift/
 http://example.com/tags/two-pointers/
 http://example.com/tags/hash/
-http://example.com/tags/slide-window/
 http://example.com/tags/backtrack/
+http://example.com/tags/slide-window/
 http://example.com/tags/binary-tree/
 http://example.com/tags/sort/
 http://example.com/tags/heap/
@@ -65,14 +68,14 @@ http://example.com/categories/machine-learning/
 http://example.com/categories/Programming-Language/
 http://example.com/categories/machine-learning/Dive-into-Deep-Learning-Notes/
 http://example.com/categories/ubuntu/
-http://example.com/categories/vector-db/
 http://example.com/categories/Algorithm/
+http://example.com/categories/vector-db/
 http://example.com/categories/Programming-Language/C/
 http://example.com/categories/python/
 http://example.com/categories/mlsys/
-http://example.com/categories/machine-learning/Dive-into-Deep-Learning-Notes/optimization/
 http://example.com/categories/db-index/
 http://example.com/categories/Algorithm/C/
+http://example.com/categories/machine-learning/Dive-into-Deep-Learning-Notes/optimization/
 http://example.com/categories/python/basics/
 http://example.com/categories/db-index/predictive/
 http://example.com/categories/Algorithm/C/job/
